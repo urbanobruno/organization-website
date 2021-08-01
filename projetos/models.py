@@ -5,7 +5,7 @@ from datetime import datetime
 class TipoTarefa(models.Model):
     # Exemplo: pode ser um evento, uma tarefa, um lembrete, etc
     # Ja deixar criado
-    descricao = models.CharField()
+    descricao = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = 'Tipo'
@@ -15,7 +15,7 @@ class TipoTarefa(models.Model):
 class PrioridadeTarefa(models.Model):
     # Exemplo: alta, média, baixa
     # Ja deixar criado
-    descricao = models.CharField()
+    descricao = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = 'Prioridade'
@@ -23,7 +23,7 @@ class PrioridadeTarefa(models.Model):
 
 
 class Tarefa(models.Model):
-    titulo = models.CharField()
+    titulo = models.CharField(max_length=100)
     descricao = models.TextField(max_length=255)
     tipo = models.ForeignKey(TipoTarefa, blank=True, null=True, on_delete=models.DO_NOTHING)
     prioridade = models.ForeignKey(PrioridadeTarefa, blank=True, null=True, on_delete=models.DO_NOTHING)
