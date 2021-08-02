@@ -22,7 +22,7 @@ urlpatterns = [
     path('projeto/', include('projetos.urls')),
     path('calendario/', include('calendario.urls')),
     path('notas/', include('notas.urls')),
-    path('/', include('home.urls')),
+    path('', include('home.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
