@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path(
         '',
-        views.base_projetos,
-        name='projetos'
+        views.base_home,
+        name='home'
     )
 ]
