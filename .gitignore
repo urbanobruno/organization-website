@@ -1,4 +1,3 @@
-.idea/
+secrets_settings.py
 .env
 .env*
-secrets_settings.py
