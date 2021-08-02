@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m2l101v=qo4(80bs2+$dvp4pf2sb!dz9g&e5nt417)@rwd=2x1'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,15 +79,7 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'to_do_list',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-    }
-}
+
 
 
 # Password validation
