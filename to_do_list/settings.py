@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+SECRET_KEY = os.environ.get('SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
@@ -79,8 +79,20 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DB_NAME = os.environ.get('DB_NAME')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = os.environ.get('DB_PORT')
+DB_USER = os.environ.get('DB_USER')
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
+        'USER': DB_USER,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
