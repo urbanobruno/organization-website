@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+
 import os
 from pathlib import Path
 from django.contrib.messages import constants
-from secrets import *
+from secrets_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = dados['SECRET_KEY']
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
@@ -79,10 +81,16 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DB_NAME = os.environ.get('DB_NAME')
-DB_HOST = os.environ.get('DB_HOST')
-DB_PORT = os.environ.get('DB_PORT')
-DB_USER = os.environ.get('DB_USER')
+DB_NAME = dados['DB_NAME']
+DB_HOST = dados['DB_HOST']
+DB_PORT = dados['DB_PORT']
+DB_USER = dados['DB_USER']
+
+# DB_NAME = os.environ.get('DB_NAME')
+# DB_HOST = os.environ.get('DB_HOST')
+# DB_PORT = os.environ.get('DB_PORT')
+# DB_USER = os.environ.get('DB_USER')
+
 
 DATABASES = {
     'default': {
