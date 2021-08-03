@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap-grid.css' %}"/>
 <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap-grid.rtl.css' %}"/>
 
-<!-- TODO: tirar -->
+<!-- TODO: fix barra superior margin / padding -->
 <div style="margin-top: 150px">
 
 </div>
@@ -56,14 +56,8 @@
                     <div class="list-group list-group-flush">
                         {% for tarefa in item.tarefas_to_do %}
                             <div class="list-group-item list-group-item-action"
-{#                                 ic-get-from="{% url 'open_modal' %}"#}
-{#                                 ic-target="#base_modal_content"#}
-{#                                 ic-include='{#}
-{#                                        "url":"{% url "tabelas" 'debenture' tarefa.id %}",#}
-{#                                        "nome":"form_detalhe_tarefa",#}
-{#                                        "view_only": true,#}
-{#                                        "titulo":"Detalhe"}'#}
-                            > <!-- TODO: testar -->
+
+                            > <!-- TODO: add javascript form -->
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">
                                         {{ tarefa }}
@@ -95,13 +89,7 @@
                     <div class="list-group list-group-flush">
                         {% for tarefa in item.tarefas_doing %}
                             <div class="list-group-item list-group-item-action"
-{#                                 ic-get-from="{% url 'open_modal' %}"#}
-{#                                 ic-target="#base_modal_content"#}
-{#                                 ic-include='{#}
-{#                                                        "url":"{% url "tabelas" 'debenture' debent.id %}",#}
-{#                                                        "nome":"form_detalhe_debenture",#}
-{#                                                        "view_only": true,#}
-{#                                                        "titulo":"Detalhe Debenture"}'#}
+
                             >
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">
@@ -135,13 +123,7 @@
                     <div class="list-group list-group-flush">
                         {% for tarefa in item.tarefas_done %}
                             <div class="list-group-item list-group-item-action"
-{#                                 ic-get-from="{% url 'open_modal' %}"#}
-{#                                 ic-target="#base_modal_content"#}
-{#                                 ic-include='{#}
-{#                                                        "url":"{% url "tabelas" 'debenture' debent.id %}",#}
-{#                                                        "nome":"form_detalhe_debenture",#}
-{#                                                        "view_only": true,#}
-{#                                                        "titulo":"Detalhe Debenture"}'#}
+
                             >
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">
