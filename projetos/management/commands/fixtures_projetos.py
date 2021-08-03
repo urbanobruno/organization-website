@@ -1,16 +1,31 @@
 from django.core.management import BaseCommand
-from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto
-from home.models import Usuario
+from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto, Usuario
+
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        Usuario.objects.create(
+        Usuario.objects.all().delete()
+        Projeto.objects.all().delete()
+        TipoTarefa.objects.all().delete()
+        PrioridadeTarefa.objects.all().delete()
+        Tarefa.objects.all().delete()
+
+
+
+        u = Usuario.objects.create(
+            id=1,
             nome='Bruno',
             sobrenome='Urbano',
             email='bruno.urbano.rocha@gmail.com'
+        )
+
+        proj = Projeto.objects.create(
+            id=1,
+            nome='Projeto 1',
+            usuario_id=u.id,
         )
 
         list_prioridade = [
@@ -20,12 +35,16 @@ class Command(BaseCommand):
         ]
 
         lista = []
+        x = 1
         for p in list_prioridade:
             lista.append(
                 PrioridadeTarefa(
-                    descricao=p
+                    id=x,
+                    descricao=p,
+                    projeto_id=proj.id,
                 )
             )
+            x += 1
 
         PrioridadeTarefa.objects.bulk_create(lista)
 
@@ -36,51 +55,48 @@ class Command(BaseCommand):
         ]
 
         lista = []
+        x = 1
         for t in list_tipos:
             lista.append(
                 TipoTarefa(
-                    descricao=t
+                    id=x,
+                    descricao=t,
+                    projeto_id=proj.id,
                 )
             )
+            x += 1
 
         TipoTarefa.objects.bulk_create(lista)
 
-        user = Usuario.objects.get(id=1)
-
         lista = []
         lista.append(Tarefa(
+            id=1,
             titulo='Teste 1',
             descricao='Descricao 1',
             tipo_id=TipoTarefa.objects.get(id=1).id,
             prioridade_id=PrioridadeTarefa.objects.get(id=1).id,
             status=1,
-            usuario_id=user.id
+            projeto_id=proj.id,
         ))
 
         lista.append(Tarefa(
+            id=2,
             titulo='Teste 2',
             descricao='Descricao 2',
             tipo_id=TipoTarefa.objects.get(id=2).id,
             prioridade_id=PrioridadeTarefa.objects.get(id=2).id,
             status=2,
-            usuario_id=user.id
+            projeto_id=proj.id,
         ))
 
         lista.append(Tarefa(
+            id=3,
             titulo='Teste 3',
             descricao='Descricao 3',
             tipo_id=TipoTarefa.objects.get(id=3).id,
             prioridade_id=PrioridadeTarefa.objects.get(id=3).id,
             status=3,
-            usuario_id=user.id,
+            projeto_id=proj.id,
         ))
 
         Tarefa.objects.bulk_create(lista)
-
-        Projeto.objects.create(
-            nome='Projeto 1',
-            usuario_id=user.id,
-        )
-
-        for t in Tarefa.objects.all():
-            Projeto.objects.get(id=1).tarefas.add(t.id)

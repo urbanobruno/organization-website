@@ -1,34 +1,64 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from datetime import datetime
-
 from django.utils import timezone
-
-from home.models import Usuario
-
 
 # TODO ADICIONAR FEATURE PARA PODER ESCOLHER A COR DO BLOCK
 # CASO NÃO ESCOLHIDO, RANDOMIZAR
+
+
+class Usuario(models.Model):
+    nome = models.CharField(max_length=100)
+    sobrenome = models.CharField(max_length=100)
+    email = models.EmailField()
+
+
+class Projeto(models.Model):
+    nome = models.CharField(max_length=100)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+    def tarefas_to_do(self):
+        return self.tarefa_set.filter(
+            status=1
+        )
+
+    def tarefas_doing(self):
+        return self.tarefa_set.filter(
+            status=2
+        )
+
+    def tarefas_done(self):
+        return self.tarefa_set.filter(
+            status=3
+        )
 
 
 class TipoTarefa(models.Model):
     # Exemplo: pode ser um evento, uma tarefa, um lembrete, etc
     # Ja deixar criado
     descricao = models.CharField(max_length=50)
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Tipo'
         verbose_name_plural = 'Tipos'
 
+    def __str__(self):
+        return self.descricao
 
+
+# todo chech foreign key -> many to one
 class PrioridadeTarefa(models.Model):
     # Exemplo: alta, média, baixa
     # Ja deixar criado
     descricao = models.CharField(max_length=50)
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Prioridade'
         verbose_name_plural = 'Prioridades'
+
+    def __str__(self):
+        return self.descricao
 
 
 class Tarefa(models.Model):
@@ -45,7 +75,7 @@ class Tarefa(models.Model):
     data_criacao = models.DateTimeField(default=timezone.now, editable=False)
     data_final = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField(choices=STATUS, default=1)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
 
     verbose_name = 'Tarefa'
     verbose_name_plural = 'Tarefas'
@@ -63,29 +93,10 @@ class Tarefa(models.Model):
         return f'{self.titulo}'
 
     def status_display(self):
-        return self.STATUS[self.status]
+        return self.STATUS[self.status - 1][1]
+    # TODO: CHECAR
 
     # TODO: check -- filter user
     # check if user has to be in projetos and in tarefa
 
-
 # TODO: poder criar mais de um projeto e poder atribuir tarefas a ele
-class Projeto(models.Model):
-    nome = models.CharField(max_length=100)
-    tarefas = models.ManyToManyField(Tarefa)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-    def tarefas_to_do(self):
-        return self.tarefas.filter(
-            status=1
-        )
-
-    def tarefas_doing(self):
-        return self.tarefas.filter(
-            status=2
-        )
-
-    def tarefas_done(self):
-        return self.tarefas.filter(
-            status=3
-        )
