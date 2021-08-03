@@ -35,6 +35,7 @@ SECRET_KEY = dados['SECRET_KEY']
 # Application definition
 
 INSTALLED_APPS = [
+    'home',
     'calendario',
     'projetos',
     'notas',

@@ -1,43 +1,150 @@
+{#{% load static %}#}
+{##}
 {% include 'barra_superior.html' %}
-
-<div class="row" style="margin-top: 45px">
-
-    <!-- TIPOS & PRIORIDADES -->
-
-    <div class="col-12 col-md-3" style="background: #204d74">
-        <div>
-            <h3>TIPOS</h3>
-
-
-        </div>
-
-        <div>
-            <h3>PRIORIDADES</h3>
-
-
-        </div>
-    </div>
-
-    <!-- TO DO -->
-
-    <div class="col-12 col-md-3" style="background: red">
-        <div class="card-header">
-
-            teste
-        </div>
-
-    </div>
-
-    <!-- DOING -->
-
-    <div class="col-12 col-md-3" style="background: aliceblue">
-
-    </div>
-
-    <!-- DONE -->
-
-    <div class="col-12 col-md-3" style="background: aquamarine">
-
-    </div>
-
-</div>
+{##}
+{#<link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap-grid.css' %}" />#}
+{#<link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap-grid.rtl.css' %}" />#}
+{##}
+{##}
+{#    <div class="row w-100">#}
+{##}
+{#        <!-- TIPOS & PRIORIDADES -->#}
+{##}
+{#        <div class="col-12 col-md-3" style="background: #204d74">#}
+{#            <div>#}
+{#                <h3>TIPOS</h3>#}
+{##}
+{##}
+{#            </div>#}
+{##}
+{#            <div>#}
+{#                <h3>PRIORIDADES</h3>#}
+{##}
+{##}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <!-- TO DO -->#}
+{##}
+{#        <div class="col-12 col-md-3" style="background: red">#}
+{#            <div class="card-header">#}
+{#                TO DO TAREFAS TESTE#}
+{#            </div>#}
+{#            <div class="card-body">#}
+{#                <div class="list-group list-group-flush">#}
+{#                    {% for tarefa in item.tarefas_to_do %}  <!-- TODO testar -->#}
+{#                        <div class="list-group-item list-group-item-action"#}
+{#                                                     ic-get-from="{% url 'open_modal' %}"#}
+{#                                                     ic-target="#base_modal_content"#}
+{#                                                     ic-include='{#}
+{#                                                        "url":"{% url "tabelas" 'debenture' debent.id %}",#}
+{#                                                        "nome":"form_detalhe_debenture",#}
+{#                                                        "view_only": true,#}
+{#                                                        "titulo":"Detalhe Debenture"}'#}
+{#                        >#}
+{#                            <div class="d-flex w-100 justify-content-between">#}
+{#                                <h6 class="mb-1">#}
+{#                                    {{ tarefa }}#}
+{#                                </h6>#}
+{#                                      <h6 class="badge badge-{{ debent.status_cor }}">Status: {{ debent.get_status_display }}</h6>#}
+{#                            </div>#}
+{#                            <p class="mb-1 small">#}
+{#                                <b>Tipo:</b> {{ tarefa.tipo }} <br>#}
+{#                                <b>Prioridade:</b> {{ tarefa.prioridade }} <br>#}
+{##}
+{#                            </p>#}
+{#                                                <small>#}
+{#                                                    Data de Criação: {{ tarefa.data_criacao }}<br>#}
+{#                                                    Data de Final: {{ tarefa.data_final }}#}
+{#                                                </small>#}
+{#                        </div>#}
+{##}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#        <!-- DOING -->#}
+{##}
+{#        <div class="col-12 col-md-3" style="background: aliceblue">#}
+{#            <div class="card-header">#}
+{#                DOING TAREFAS TESTE#}
+{#            </div>#}
+{#            <div class="card-body">#}
+{#                <div class="list-group list-group-flush">#}
+{#                    {% for tarefa in item.tarefas_doing %}  <!-- TODO testar -->#}
+{#                        <div class="list-group-item list-group-item-action"#}
+{#                                                     ic-get-from="{% url 'open_modal' %}"#}
+{#                                                     ic-target="#base_modal_content"#}
+{#                                                     ic-include='{#}
+{#                                                        "url":"{% url "tabelas" 'debenture' debent.id %}",#}
+{#                                                        "nome":"form_detalhe_debenture",#}
+{#                                                        "view_only": true,#}
+{#                                                        "titulo":"Detalhe Debenture"}'#}
+{#                        >#}
+{#                            <div class="d-flex w-100 justify-content-between">#}
+{#                                <h6 class="mb-1">#}
+{#                                    {{ tarefa }}#}
+{#                                </h6>#}
+{#                                      <h6 class="badge badge-{{ debent.status_cor }}">Status: {{ debent.get_status_display }}</h6>#}
+{#                            </div>#}
+{#                            <p class="mb-1 small">#}
+{#                                <b>Tipo:</b> {{ tarefa.tipo }} <br>#}
+{#                                <b>Prioridade:</b> {{ tarefa.prioridade }} <br>#}
+{##}
+{#                            </p>#}
+{#                                                <small>#}
+{#                                                    Data de Criação: {{ tarefa.data_criacao }}<br>#}
+{#                                                    Data de Final: {{ tarefa.data_final }}#}
+{#                                                </small>#}
+{#                        </div>#}
+{##}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{##}
+{#        <!-- DONE -->#}
+{##}
+{#        <div class="col-12 col-md-3" style="background: aquamarine">#}
+{#            <div class="card-header">#}
+{#                DONE TAREFAS TESTE#}
+{#            </div>#}
+{#            <div class="card-body">#}
+{#                <div class="list-group list-group-flush">#}
+{#                    {% for tarefa in item.tarefas_done %}  <!-- TODO testar -->#}
+{#                        <div class="list-group-item list-group-item-action"#}
+{#                                                     ic-get-from="{% url 'open_modal' %}"#}
+{#                                                     ic-target="#base_modal_content"#}
+{#                                                     ic-include='{#}
+{#                                                        "url":"{% url "tabelas" 'debenture' debent.id %}",#}
+{#                                                        "nome":"form_detalhe_debenture",#}
+{#                                                        "view_only": true,#}
+{#                                                        "titulo":"Detalhe Debenture"}'#}
+{#                        >#}
+{#                            <div class="d-flex w-100 justify-content-between">#}
+{#                                <h6 class="mb-1">#}
+{#                                    {{ tarefa }}#}
+{#                                </h6>#}
+{#                                      <h6 class="badge badge-{{ debent.status_cor }}">Status: {{ debent.get_status_display }}</h6>#}
+{#                            </div>#}
+{#                            <p class="mb-1 small">#}
+{#                                <b>Tipo:</b> {{ tarefa.tipo }} <br>#}
+{#                                <b>Prioridade:</b> {{ tarefa.prioridade }} <br>#}
+{##}
+{#                            </p>#}
+{#                                                <small>#}
+{#                                                    Data de Criação: {{ tarefa.data_criacao }}<br>#}
+{#                                                    Data de Final: {{ tarefa.data_final }}#}
+{#                                                </small>#}
+{#                        </div>#}
+{##}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#    </div>#}
