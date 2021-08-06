@@ -2,7 +2,6 @@ from django.core.management import BaseCommand
 from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto, Usuario
 
 
-
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -13,13 +12,13 @@ class Command(BaseCommand):
         PrioridadeTarefa.objects.all().delete()
         Tarefa.objects.all().delete()
 
-
+        # TODO: rodar novamente
 
         u = Usuario.objects.create(
             id=1,
             nome='Bruno',
             sobrenome='Urbano',
-            email='bruno.urbano.rocha@gmail.com'
+            email='teste@gmail.com'
         )
 
         proj = Projeto.objects.create(

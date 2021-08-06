@@ -1,10 +1,8 @@
-{% load static %}
+{% extends 'barra_superior.html' %}
 
-{% include 'barra_superior.html' %}
 
-<link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap-grid.css' %}"/>
-<link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap-grid.rtl.css' %}"/>
 
+{% block conteudo %}
 <!-- TODO: fix barra superior margin / padding -->
 <div style="margin-top: 150px">
 
@@ -17,7 +15,19 @@
     <div class="col-12 col-md-2">
         <div class="container mb-4">
             <div class="card-header">
-                <h3>Tipos</h3>
+{#                <h3>Tipos</h3> <!-- Trigger/Open The Modal -->#}
+{#                    <button id="myBtn">Open Modal</button>#}
+{##}
+{#                    <!-- The Modal -->#}
+{#                    <div id="myModal" class="modal">#}
+{##}
+{#                      <!-- Modal content -->#}
+{#                      <div class="modal-content">#}
+{#                        <span class="close">&times;</span>#}
+{#                        <p>Some text in the Modal..</p>#}
+{#                      </div>#}
+{##}
+{#                    </div>#}
             </div>
             <div class="card-body">
                 <div class="list-group list-group-flush">
@@ -45,12 +55,14 @@
         </div>
     </div>
 
+
     <!-- TO DO -->
     <div class="col-12 col-md-10">
         <div class="row">
             <div class="col-12 col-md-4">
                 <div class="card-header">
-                    To Do
+                    To Do  <i class="badge bg-danger rounded-pill" style="float: right">
+                            {{ item.tarefas_to_do.count }}</i>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -83,7 +95,8 @@
 
             <div class="col-12 col-md-4">
                 <div class="card-header">
-                    Doing
+                    Doing  <i class="badge bg-danger rounded-pill" style="float: right">
+                            {{ item.tarefas_doing.count }}</i>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -117,7 +130,8 @@
 
             <div class="col-12 col-md-4">
                 <div class="card-header">
-                    Done
+                    Done  <i class="badge bg-danger rounded-pill" style="float: right">
+                            {{ item.tarefas_done.count }}</i>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -149,3 +163,4 @@
         </div>
     </div>
 </div>
+{% endblock %}
