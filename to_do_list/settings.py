@@ -86,6 +86,7 @@ DB_NAME = dados['DB_NAME']
 DB_HOST = dados['DB_HOST']
 DB_PORT = dados['DB_PORT']
 DB_USER = dados['DB_USER']
+DB_PASSWORD = dados['DB_PASSWORD']
 
 # DB_NAME = os.environ.get('DB_NAME')
 # DB_HOST = os.environ.get('DB_HOST')
@@ -95,11 +96,14 @@ DB_USER = dados['DB_USER']
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': DB_NAME,
         'HOST': DB_HOST,
         'PORT': DB_PORT,
         'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        # 'ATOMIC_REQUESTS': True,
+        # 'CONN_MAX_AGE': 0,
     }
 }
 
