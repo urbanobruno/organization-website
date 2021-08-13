@@ -147,7 +147,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ('C:/Users/bruno_e16t73o/PycharmProjects/to_do_list/templates/static',)
 # (os.path.join(BASE_DIR, 'templates/static'), )
 # TODO: checar com [BASE_DIR / 'templates/static']
-# TODO: checar virgula
+# TODO: trocar + checar virgula
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
