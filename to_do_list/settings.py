@@ -82,17 +82,16 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DB_NAME = dados['DB_NAME']
-DB_HOST = dados['DB_HOST']
-DB_PORT = dados['DB_PORT']
-DB_USER = dados['DB_USER']
-DB_PASSWORD = dados['DB_PASSWORD']
-
 # DB_NAME = os.environ.get('DB_NAME')
 # DB_HOST = os.environ.get('DB_HOST')
 # DB_PORT = os.environ.get('DB_PORT')
 # DB_USER = os.environ.get('DB_USER')
 
+DB_NAME = dados['DB_NAME']
+DB_HOST = dados['DB_HOST']
+DB_PORT = dados['DB_PORT']
+DB_USER = dados['DB_USER']
+DB_PASSWORD = dados['DB_PASSWORD']
 
 DATABASES = {
     'default': {
@@ -103,7 +102,6 @@ DATABASES = {
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
         # 'ATOMIC_REQUESTS': True,
-        # 'CONN_MAX_AGE': 0,
     }
 }
 
@@ -144,10 +142,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ('C:/Users/bruno_e16t73o/PycharmProjects/to_do_list/templates/static',)
+STATICFILES_DIRS = [BASE_DIR / 'templates/static']
 # (os.path.join(BASE_DIR, 'templates/static'), )
-# TODO: checar com [BASE_DIR / 'templates/static']
-# TODO: trocar + checar virgula
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

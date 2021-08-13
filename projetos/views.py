@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render
-from projetos.models import Usuario, Projeto, PrioridadeTarefa, Tarefa, TipoTarefa
-# Create your views here.
+from projetos.models import Projeto, PrioridadeTarefa, Tarefa, TipoTarefa
 
 
+# @login_required
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
 

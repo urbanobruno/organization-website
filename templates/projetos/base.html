@@ -1,166 +1,184 @@
 {% extends 'barra_superior.html' %}
 
 
-
 {% block conteudo %}
-<!-- TODO: fix barra superior margin / padding -->
-<div style="margin-top: 150px">
+    <!-- TODO: fix barra superior margin / padding -->
+    <div style="margin-top: 150px">
 
-</div>
-
-<div class="row w-100">
-
-    <!-- TIPOS & PRIORIDADES -->
-
-    <div class="col-12 col-md-2">
-        <div class="container mb-4">
-            <div class="card-header">
-{#                <h3>Tipos</h3> <!-- Trigger/Open The Modal -->#}
-{#                    <button id="myBtn">Open Modal</button>#}
-{##}
-{#                    <!-- The Modal -->#}
-{#                    <div id="myModal" class="modal">#}
-{##}
-{#                      <!-- Modal content -->#}
-{#                      <div class="modal-content">#}
-{#                        <span class="close">&times;</span>#}
-{#                        <p>Some text in the Modal..</p>#}
-{#                      </div>#}
-{##}
-{#                    </div>#}
-            </div>
-            <div class="card-body">
-                <div class="list-group list-group-flush">
-                    {% for tipo in item.tipotarefa_set.all %}
-                        {{ tipo }} <br>
-                    {% endfor %}
-                </div>
-            </div>
-
-
-        </div>
-
-        <div class="container mb-4">
-            <div class="card-header">
-                <h3>Prioridades</h3>
-            </div>
-            <div class="card-body">
-                <div class="list-group list-group-flush">
-                    {% for prioridade in item.prioridadetarefa_set.all %}
-                        {{ prioridade }} <br>
-                    {% endfor %}
-                </div>
-            </div>
-
-        </div>
     </div>
 
+    <div class="row w-100 h-100" >
 
-    <!-- TO DO -->
-    <div class="col-12 col-md-10">
-        <div class="row">
-            <div class="col-12 col-md-4">
+        <!-- TIPOS & PRIORIDADES -->
+
+        <div class="col-12 col-md-2">
+            <div class="container mb-4">
                 <div class="card-header">
-                    To Do  <i class="badge bg-danger rounded-pill" style="float: right">
-                            {{ item.tarefas_to_do.count }}</i>
+                    Tipos
+                    {#                <h3>Tipos</h3> <!-- Trigger/Open The Modal -->#}
+                    {#                    <button id="myBtn">Open Modal</button>#}
+                    {##}
+                    {#                    <!-- The Modal -->#}
+                    {#                    <div id="myModal" class="modal">#}
+                    {##}
+                    {#                      <!-- Modal content -->#}
+                    {#                      <div class="modal-content">#}
+                    {#                        <span class="close">&times;</span>#}
+                    {#                        <p>Some text in the Modal..</p>#}
+                    {#                      </div>#}
+                    {##}
+                    {#                    </div>#}
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
-                        {% for tarefa in item.tarefas_to_do %}
-                            <div class="list-group-item list-group-item-action"
+                        {% for tipo in item.tipotarefa_set.all %}
+                            {{ tipo }} <br>
+                        {% endfor %}
+                    </div>
+                </div>
 
-                            > <!-- TODO: add javascript form -->
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">
-                                        {{ tarefa }}
-                                    </h6>
-                                </div>
-                                <p class="mb-1 small">
-                                    <b>Tipo:</b> {{ tarefa.tipo }} <br>
-                                    <b>Prioridade:</b> {{ tarefa.prioridade }}
 
-                                </p>
-                                <small>
-                                    {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
-                                </small>
-                            </div>
+            </div>
 
+            <div class="container mb-4">
+                <div class="card-header">
+                    Prioridades
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for prioridade in item.prioridadetarefa_set.all %}
+                            {{ prioridade }} <br>
                         {% endfor %}
                     </div>
                 </div>
 
             </div>
+        </div>
 
-            <!-- DOING -->
 
-            <div class="col-12 col-md-4">
-                <div class="card-header">
-                    Doing  <i class="badge bg-danger rounded-pill" style="float: right">
-                            {{ item.tarefas_doing.count }}</i>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        {% for tarefa in item.tarefas_doing %}
-                            <div class="list-group-item list-group-item-action"
+        <!-- TO DO -->
+        <div class="col-12 col-md-10" >
+            <div class="row h-100" id="shared">
+                <div class="col-12 col-md-4 h-100 rounded" id="todo_shared" style="background: #204d74">
+                    <div class="card-header">
+                        To Do <i class="badge bg-danger rounded-pill" style="float: right">
+                        {{ item.tarefas_to_do.count }}</i>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            {% for tarefa in item.tarefas_to_do %}
+                                <div class="list-group-item rounded"
 
-                            >
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">
-                                        {{ tarefa }}
-                                    </h6>
+                                > <!-- TODO: add javascript form -->
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">
+                                            {{ tarefa }}
+                                        </h6>
+                                    </div>
+                                    <p class="mb-1 small">
+                                        <b>Tipo:</b> {{ tarefa.tipo }} <br>
+                                        <b>Prioridade:</b> {{ tarefa.prioridade }}
+
+                                    </p>
+                                    <small>
+                                        {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
+                                    </small>
                                 </div>
-                                <p class="mb-1 small">
-                                    <b>Tipo:</b> {{ tarefa.tipo }} <br>
-                                    <b>Prioridade:</b> {{ tarefa.prioridade }}
 
-                                </p>
-                                <small>
-                                    {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
-                                </small>
-                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
 
-                        {% endfor %}
+                </div>
+
+                <!-- DOING -->
+
+                <div class="col-12 col-md-4 h-100 rounded" id="doing_shared" style="background: #1c1f23">
+                    <div class="card-header">
+                        Doing <i class="badge bg-danger rounded-pill" style="float: right">
+                        {{ item.tarefas_doing.count }}</i>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            {% for tarefa in item.tarefas_doing %}
+                                <div class="list-group-item rounded"
+
+                                >
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">
+                                            {{ tarefa }}
+                                        </h6>
+                                    </div>
+                                    <p class="mb-1 small">
+                                        <b>Tipo:</b> {{ tarefa.tipo }} <br>
+                                        <b>Prioridade:</b> {{ tarefa.prioridade }}
+
+                                    </p>
+                                    <small>
+                                        {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
+                                    </small>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- DONE -->
+
+                <div class="col-12 col-md-4 h-100 rounded" id="done_shared" style="background: #0dcaf0">
+                    <div class="card-header">
+                        Done <i class="badge bg-danger rounded-pill" style="float: right">
+                        {{ item.tarefas_done.count }}</i>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            {% for tarefa in item.tarefas_done %}
+                                <div class="list-group-item rounded"
+
+                                >
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">
+                                            {{ tarefa }}
+                                        </h6>
+
+                                    </div>
+                                    <p class="mb-1 small">
+                                        <b>Tipo:</b> {{ tarefa.tipo }} <br>
+                                        <b>Prioridade:</b> {{ tarefa.prioridade }}
+
+                                    </p>
+                                    <small>
+                                        {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
+                                    </small>
+                                </div>
+
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
 
             </div>
-
-
-            <!-- DONE -->
-
-            <div class="col-12 col-md-4">
-                <div class="card-header">
-                    Done  <i class="badge bg-danger rounded-pill" style="float: right">
-                            {{ item.tarefas_done.count }}</i>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        {% for tarefa in item.tarefas_done %}
-                            <div class="list-group-item list-group-item-action"
-
-                            >
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">
-                                        {{ tarefa }}
-                                    </h6>
-
-                                </div>
-                                <p class="mb-1 small">
-                                    <b>Tipo:</b> {{ tarefa.tipo }} <br>
-                                    <b>Prioridade:</b> {{ tarefa.prioridade }}
-
-                                </p>
-                                <small>
-                                    {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
-                                </small>
-                            </div>
-
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
-</div>
 {% endblock %}
+
+<script>
+    new Sortable(todo_shared, {
+        group: 'shared',
+        animation: 150
+    });
+
+    new Sortable(doing_shared, {
+        group: 'shared',
+        animation: 150
+    });
+
+    new Sortable(done_shared, {
+        group: 'shared',
+        animation: 150
+    });
+
+</script>

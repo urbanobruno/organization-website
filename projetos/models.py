@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -6,15 +7,9 @@ from django.utils import timezone
 # CASO NÃO ESCOLHIDO, RANDOMIZAR
 
 
-class Usuario(models.Model):
-    nome = models.CharField(max_length=100)
-    sobrenome = models.CharField(max_length=100)
-    email = models.EmailField()
-
-
 class Projeto(models.Model):
     nome = models.CharField(max_length=100)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def tarefas_to_do(self):
         return self.tarefa_set.filter(

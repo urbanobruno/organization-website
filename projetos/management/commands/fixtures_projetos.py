@@ -1,12 +1,13 @@
+from django.contrib.auth.models import User
 from django.core.management import BaseCommand
-from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto, Usuario
+from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        Usuario.objects.all().delete()
+        User.objects.all().delete()
         Projeto.objects.all().delete()
         TipoTarefa.objects.all().delete()
         PrioridadeTarefa.objects.all().delete()
@@ -14,10 +15,11 @@ class Command(BaseCommand):
 
         # TODO: rodar novamente
 
-        u = Usuario.objects.create(
+        u = User.objects.create(
             id=1,
-            nome='Bruno',
-            sobrenome='Urbano',
+            username='brunourbano',
+            first_name='Bruno',
+            last_name='Urbano',
             email='teste@gmail.com'
         )
 
