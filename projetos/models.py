@@ -71,9 +71,12 @@ class Tarefa(models.Model):
     data_final = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField(choices=STATUS, default=1)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
+    ordem = models.IntegerField(default=1)
 
-    verbose_name = 'Tarefa'
-    verbose_name_plural = 'Tarefas'
+    class Meta:
+        verbose_name = 'Tarefa'
+        verbose_name_plural = 'Tarefas'
+        ordering = ['ordem']
 
     def clean(self):
         if not self.titulo and not self.descricao:
@@ -85,7 +88,7 @@ class Tarefa(models.Model):
             )
 
     def __str__(self):
-        return f'{self.titulo}'
+        return f'{self.titulo}' or f'{self.descricao}'
 
     def status_display(self):
         return self.STATUS[self.status - 1][1]

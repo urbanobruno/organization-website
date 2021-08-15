@@ -1,33 +1,22 @@
-{% extends 'barra_superior.html' %}
+{% extends 'index.html' %}
+{% load static %}
 
+<link href="{% static 'handle_style.css' %}">
 
-{% block conteudo %}
+{% block content %}
+
     <!-- TODO: fix barra superior margin / padding -->
     <div style="margin-top: 150px">
 
     </div>
 
-    <div class="row w-100 h-100" >
+    <div class="row w-100 h-100">
 
         <!-- TIPOS & PRIORIDADES -->
-
         <div class="col-12 col-md-2">
             <div class="container mb-4">
                 <div class="card-header">
                     Tipos
-                    {#                <h3>Tipos</h3> <!-- Trigger/Open The Modal -->#}
-                    {#                    <button id="myBtn">Open Modal</button>#}
-                    {##}
-                    {#                    <!-- The Modal -->#}
-                    {#                    <div id="myModal" class="modal">#}
-                    {##}
-                    {#                      <!-- Modal content -->#}
-                    {#                      <div class="modal-content">#}
-                    {#                        <span class="close">&times;</span>#}
-                    {#                        <p>Some text in the Modal..</p>#}
-                    {#                      </div>#}
-                    {##}
-                    {#                    </div>#}
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -36,9 +25,8 @@
                         {% endfor %}
                     </div>
                 </div>
-
-
             </div>
+
 
             <div class="container mb-4">
                 <div class="card-header">
@@ -53,27 +41,32 @@
                 </div>
 
             </div>
+
         </div>
 
 
-        <!-- TO DO -->
-        <div class="col-12 col-md-10" >
-            <div class="row h-100" id="shared">
-                <div class="col-12 col-md-4 h-100 rounded" id="todo_shared" style="background: #204d74">
+        <!-- ROW -->
+        <div class="col-12 col-md-10">
+            <div class="row h-100" id="shared_project">
+
+                <!-- TO DO -->
+                <div class="col-12 col-md-4 h-100 rounded border border-dark">
+
                     <div class="card-header">
-                        To Do <i class="badge bg-danger rounded-pill" style="float: right">
+                        To Do <i class="badge bg-dark rounded-pill float-right text-white">
                         {{ item.tarefas_to_do.count }}</i>
                     </div>
                     <div class="card-body">
-                        <div class="list-group list-group-flush">
+                        <ul class="list-group" id="todo">
                             {% for tarefa in item.tarefas_to_do %}
-                                <div class="list-group-item rounded"
-
-                                > <!-- TODO: add javascript form -->
+                                <li class="list-group-item rounded mb-2">
+                                    <!-- JAVASCRIPT FORM -->
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">
+                                        <div class="handle">
+                                            <i class="fas fa-arrows-alt"></i>
                                             {{ tarefa }}
-                                        </h6>
+                                        </div>
+
                                     </div>
                                     <p class="mb-1 small">
                                         <b>Tipo:</b> {{ tarefa.tipo }} <br>
@@ -83,31 +76,31 @@
                                     <small>
                                         {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
                                     </small>
-                                </div>
+                                </li>
 
                             {% endfor %}
-                        </div>
+                        </ul>
                     </div>
-
                 </div>
 
-                <!-- DOING -->
 
-                <div class="col-12 col-md-4 h-100 rounded" id="doing_shared" style="background: #1c1f23">
+                <!-- DOING -->
+                <div class="col-12 col-md-4 h-100 rounded border border-dark">
                     <div class="card-header">
-                        Doing <i class="badge bg-danger rounded-pill" style="float: right">
+                        Doing <i class="badge bg-dark rounded-pill float-right text-white">
                         {{ item.tarefas_doing.count }}</i>
                     </div>
                     <div class="card-body">
-                        <div class="list-group list-group-flush">
+                        <ul class="list-group" id="doing">
                             {% for tarefa in item.tarefas_doing %}
-                                <div class="list-group-item rounded"
-
-                                >
+                                <li class="list-group-item rounded mb-2">
+                                    <!-- JAVASCRIPT FORM -->
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">
+                                        <div class="handle">
+                                            <i class="fas fa-arrows-alt"></i>
                                             {{ tarefa }}
-                                        </h6>
+                                        </div>
+
                                     </div>
                                     <p class="mb-1 small">
                                         <b>Tipo:</b> {{ tarefa.tipo }} <br>
@@ -117,10 +110,10 @@
                                     <small>
                                         {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
                                     </small>
-                                </div>
+                                </li>
 
                             {% endfor %}
-                        </div>
+                        </ul>
                     </div>
 
                 </div>
@@ -128,21 +121,20 @@
 
                 <!-- DONE -->
 
-                <div class="col-12 col-md-4 h-100 rounded" id="done_shared" style="background: #0dcaf0">
+                <div class="col-12 col-md-4 h-100 rounded border border-dark">
                     <div class="card-header">
-                        Done <i class="badge bg-danger rounded-pill" style="float: right">
+                        Done <i class="badge bg-dark rounded-pill text-white ml-1 mr-1">
                         {{ item.tarefas_done.count }}</i>
                     </div>
                     <div class="card-body">
-                        <div class="list-group list-group-flush">
+                        <ul class="list-group" id="done">
                             {% for tarefa in item.tarefas_done %}
-                                <div class="list-group-item rounded"
-
-                                >
+                                <li class="list-group-item rounded mb-2">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">
+                                        <div class="handle">
+                                            <i class="fas fa-arrows-alt"></i>
                                             {{ tarefa }}
-                                        </h6>
+                                        </div>
 
                                     </div>
                                     <p class="mb-1 small">
@@ -153,32 +145,99 @@
                                     <small>
                                         {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
                                     </small>
-                                </div>
+                                </li>
 
                             {% endfor %}
-                        </div>
+                        </ul>
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <script>
+
+        Sortable.create(todo, {
+            group: 'shared',
+            handle: '.handle',
+            animation: 150,
+
+            onEnd: function (evt) {
+
+                console.log(evt.to.id)
+                console.log(evt.from.id)
+                console.log(evt.oldIndex)
+                console.log(evt.newIndex)
+
+
+                $.ajax({
+                    url: "/projeto/drag_task/{{ item.id }}",
+                    data: {
+                        'target': evt.to.id,
+                        'previous': evt.from.id,
+                        'index_before': evt.oldIndex,
+                        'index_after': evt.newIndex,
+                    },
+                });
+
+            }
+        })
+        ;
+
+        Sortable.create(doing, {
+            group: 'shared',
+            handle: '.handle',
+            animation: 150,
+
+            onEnd: function (evt) {
+
+                console.log(evt.to.id)
+                console.log(evt.from.id)
+                console.log(evt.oldIndex)
+                console.log(evt.newIndex)
+
+
+                $.ajax({
+                    url: "/projeto/drag_task/{{ item.id }}",
+                    data: {
+                        'target': evt.to.id,
+                        'previous': evt.from.id,
+                        'index_before': evt.oldIndex,
+                        'index_after': evt.newIndex,
+                    },
+                });
+
+            }
+
+        });
+
+        Sortable.create(done, {
+            group: 'shared',
+            handle: '.handle',
+            animation: 150,
+
+            onEnd: function (evt) {
+
+                console.log(evt.to.id)
+                console.log(evt.from.id)
+                console.log(evt.oldIndex)
+                console.log(evt.newIndex)
+
+
+                $.ajax({
+                    url: "/projeto/drag_task/{{ item.id }}",
+                    data: {
+                        'target': evt.to.id,
+                        'previous': evt.from.id,
+                        'index_before': evt.oldIndex,
+                        'index_after': evt.newIndex,
+                    },
+                });
+            }
+
+        });
+
+    </script>
+
 {% endblock %}
-
-<script>
-    new Sortable(todo_shared, {
-        group: 'shared',
-        animation: 150
-    });
-
-    new Sortable(doing_shared, {
-        group: 'shared',
-        animation: 150
-    });
-
-    new Sortable(done_shared, {
-        group: 'shared',
-        animation: 150
-    });
-
-</script>

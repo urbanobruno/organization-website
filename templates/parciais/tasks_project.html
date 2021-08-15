@@ -1,0 +1,34 @@
+
+
+<div class="col-12 col-md-4 h-100 rounded border border-dark">
+
+    <div class="card-header">
+        To Do <i class="badge bg-danger rounded-pill" style="float: right">
+        {{ item.tarefas_to_do.count }}</i>
+    </div>
+    <div class="card-body">
+        <ul class="list-group" id="todo_shared">
+            {% for tarefa in item.tarefas_to_do %}
+                <li class="list-group-item rounded">
+                    <!-- JAVASCRIPT FORM -->
+                    <div class="d-flex w-100 justify-content-between">
+                        <div class="handle">
+                            <i class="fas fa-arrows-alt"></i>
+                            {{ tarefa }}
+                        </div>
+
+                    </div>
+                    <p class="mb-1 small">
+                        <b>Tipo:</b> {{ tarefa.tipo }} <br>
+                        <b>Prioridade:</b> {{ tarefa.prioridade }}
+
+                    </p>
+                    <small>
+                        {% if tarefa.data_final %}<br>Data de Final: {{ tarefa.data_final }}{% endif %}
+                    </small>
+                </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+</div>

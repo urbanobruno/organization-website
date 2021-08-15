@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand
 from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto
-
+from random import randint
 
 class Command(BaseCommand):
 
@@ -69,35 +69,42 @@ class Command(BaseCommand):
 
         TipoTarefa.objects.bulk_create(lista)
 
-        lista = []
-        lista.append(Tarefa(
-            id=1,
-            titulo='Teste 1',
-            descricao='Descricao 1',
-            tipo_id=TipoTarefa.objects.get(id=1).id,
-            prioridade_id=PrioridadeTarefa.objects.get(id=1).id,
-            status=1,
-            projeto_id=proj.id,
-        ))
+        lista_criar = []
 
-        lista.append(Tarefa(
-            id=2,
-            titulo='Teste 2',
-            descricao='Descricao 2',
-            tipo_id=TipoTarefa.objects.get(id=2).id,
-            prioridade_id=PrioridadeTarefa.objects.get(id=2).id,
-            status=2,
-            projeto_id=proj.id,
-        ))
+        for x in range(1, 5):
+            lista_criar.append(Tarefa(
+                id=x,
+                titulo=f'Todo {x}',
+                descricao=f'Descricao TD {x}',
+                tipo_id=randint(1, 3),
+                prioridade_id=randint(1, 3),
+                status=1,
+                projeto_id=proj.id,
+                ordem=x
+            ))
 
-        lista.append(Tarefa(
-            id=3,
-            titulo='Teste 3',
-            descricao='Descricao 3',
-            tipo_id=TipoTarefa.objects.get(id=3).id,
-            prioridade_id=PrioridadeTarefa.objects.get(id=3).id,
-            status=3,
-            projeto_id=proj.id,
-        ))
+        for x in range(6, 10):
+            lista_criar.append(Tarefa(
+                id=x,
+                titulo=f'Doing {x}',
+                descricao=f'Descricao Dg {x}',
+                tipo_id=randint(1, 3),
+                prioridade_id=randint(1, 3),
+                status=2,
+                projeto_id=proj.id,
+                ordem=x
+            ))
 
-        Tarefa.objects.bulk_create(lista)
+        for x in range(11, 15):
+            lista_criar.append(Tarefa(
+                id=x,
+                titulo=f'Done {x}',
+                descricao=f'Descricao Dn {x}',
+                tipo_id=randint(1, 3),
+                prioridade_id=randint(1, 3),
+                status=3,
+                projeto_id=proj.id,
+                ordem=x
+            ))
+
+        Tarefa.objects.bulk_create(lista_criar)
