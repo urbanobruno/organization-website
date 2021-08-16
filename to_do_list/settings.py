@@ -72,6 +72,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'tags_project': 'projetos.templatetags.tags_project',
+            }
         },
     },
 ]
@@ -156,10 +159,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-MESSAGE_TAGS = {
-    constants.ERROR: 'alert-danger',
-    constants.WARNING: 'alert-warning',
-    constants.DEBUG: 'alert-info',
-    constants.SUCCESS: 'alert-success',
-    constants.INFO: 'alert-info',
-}
+# MESSAGE_TAGS = {
+#     constants.ERROR: 'alert-danger',
+#     constants.WARNING: 'alert-warning',
+#     constants.DEBUG: 'alert-info',
+#     constants.SUCCESS: 'alert-success',
+#     constants.INFO: 'alert-info',
+# }

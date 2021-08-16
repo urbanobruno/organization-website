@@ -3,6 +3,7 @@ from django.core.management import BaseCommand
 from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto
 from random import randint
 
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -73,7 +74,6 @@ class Command(BaseCommand):
 
         for x in range(1, 5):
             lista_criar.append(Tarefa(
-                id=x,
                 titulo=f'Todo {x}',
                 descricao=f'Descricao TD {x}',
                 tipo_id=randint(1, 3),
@@ -85,7 +85,6 @@ class Command(BaseCommand):
 
         for x in range(6, 10):
             lista_criar.append(Tarefa(
-                id=x,
                 titulo=f'Doing {x}',
                 descricao=f'Descricao Dg {x}',
                 tipo_id=randint(1, 3),
@@ -97,7 +96,6 @@ class Command(BaseCommand):
 
         for x in range(11, 15):
             lista_criar.append(Tarefa(
-                id=x,
                 titulo=f'Done {x}',
                 descricao=f'Descricao Dn {x}',
                 tipo_id=randint(1, 3),

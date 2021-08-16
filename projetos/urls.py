@@ -3,9 +3,12 @@ from . import views
 
 urlpatterns = [
     path('',
-        views.base_projetos,
-        name='projetos'),
+         views.base_projetos,
+         name='projetos'),
     path('drag_task/<int:project_id>',
          views.drag_task,
          name='drag_task'),
+    path('create_task/<int:projeto_id>/<int:status>',
+         views.create_task,
+         name='create_task'),
 ]

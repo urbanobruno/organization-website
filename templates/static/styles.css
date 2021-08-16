@@ -1,23 +1,22 @@
 .navbar {
-    overflow: hidden;
     background-color: #204d74;
-    position: fixed;
+    display: flex;
     top: 0;
     width: 100%;
-height: 45px;
+    min-height: 56px;
 }
 
 .navbar a {
-  float: left;
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
 }
 
 .navbar a:hover {
-  background: #23527c;
-  color: lightslategray;
+    background: #23527c;
+    color: lightslategray;
 }
 

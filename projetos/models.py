@@ -11,6 +11,13 @@ class Projeto(models.Model):
     nome = models.CharField(max_length=100)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Projeto'
+        verbose_name_plural = 'Projetos'
+
+    def __str__(self):
+        return f'{self.nome}'
+
     def tarefas_to_do(self):
         return self.tarefa_set.filter(
             status=1
@@ -63,12 +70,12 @@ class Tarefa(models.Model):
         (3, 'Done'),
     )
 
-    titulo = models.CharField(max_length=100, blank=True, null=True)
-    descricao = models.TextField(max_length=255, blank=True, null=True)
+    titulo = models.CharField(max_length=100, blank=True, null=True, verbose_name='Título')
+    descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descricão')
     tipo = models.ForeignKey(TipoTarefa, blank=True, null=True, on_delete=models.DO_NOTHING)
     prioridade = models.ForeignKey(PrioridadeTarefa, blank=True, null=True, on_delete=models.DO_NOTHING)
-    data_criacao = models.DateTimeField(default=timezone.now, editable=False)
-    data_final = models.DateTimeField(blank=True, null=True)
+    data_criacao = models.DateTimeField(default=timezone.now, editable=False, verbose_name='Data de Criação')
+    data_final = models.DateTimeField(blank=True, null=True, verbose_name='Data Final')
     status = models.IntegerField(choices=STATUS, default=1)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
     ordem = models.IntegerField(default=1)

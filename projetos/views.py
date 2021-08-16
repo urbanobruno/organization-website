@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import F
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
 
+from projetos.forms import CreateTask
 from projetos.models import Projeto, PrioridadeTarefa, Tarefa, TipoTarefa
 
 
@@ -12,8 +14,11 @@ from projetos.models import Projeto, PrioridadeTarefa, Tarefa, TipoTarefa
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
 
+    form_task = CreateTask
+
     context = {
-        'item': projeto
+        'item': projeto,
+        'form_task': form_task,
     }
 
     return render(request, 'projetos/base.html', context=context)
@@ -28,21 +33,80 @@ def adicionar_tipo(request, projeto_id, descricao):
     # )
 
 
-# TODO check csrf_exempt
+# todo login required
 def drag_task(request, project_id):
-    p = Projeto.objects.get(id=project_id)
 
+    tarefa_id = int(request.GET.get('tarefa'))
     target_list = request.GET.get('target')
-    previous_list = request.GET.get('previous')
-    index_before = request.GET.get('index_before')
-    index_after = request.GET.get('index_after')
+    index_after = int(request.GET.get('index_after'))
 
-    print(target_list)
-    print(previous_list)
-    print(index_before)
-    print(index_after)
+    dictionary = {
+        'todo': 1,
+        'doing': 2,
+        'done': 3,
+    }
 
+    # TODO: test with only one task
 
+    try:
+        new_order = Tarefa.objects.filter(
+            projeto_id=project_id,
+            status__gte=dictionary[target_list],
+        )[index_after].ordem
+    except IndexError:
+        new_order = Tarefa.objects.filter(
+            projeto_id=project_id,
+            status__lte=dictionary[target_list],
+        ).last().ordem
+
+    Tarefa.objects.filter(
+        id=tarefa_id
+    ).update(
+        status=dictionary[target_list],
+        ordem=new_order
+    )
+
+    Tarefa.objects.filter(
+        projeto_id=project_id,
+        ordem__gte=new_order,
+    ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
 
     return HttpResponse()
 
+# def contact_view(request):
+#     if request.method == 'POST':
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('index')
+#     else:
+#         form = ContactForm()
+#
+#     context = {'form': form}
+#     return render(request, 'contacts/contact_page.html', context)
+
+
+def create_task(request, projeto_id, status):
+    print(request.method)
+    p = Projeto.objects.get(pk=projeto_id)
+
+    if request.method == 'POST':
+        form = CreateTask(request.POST, initial={
+            'projeto': p,
+            'status': status
+        })
+        if form.is_valid():
+            form.save()
+            return redirect('projetos')
+    else:
+        form = CreateTask()
+
+    context = {'form': form}
+    return render(request, 'projetos/base.html', context)
+
+
+
+    print('VIEW CREATE TASK')
+    print('VIEW CREATE TASK')
+    print('VIEW CREATE TASK')
+    print('VIEW CREATE TASK')
