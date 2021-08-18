@@ -8,21 +8,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        User.objects.all().delete()
+        # User.objects.all().delete()
         Projeto.objects.all().delete()
         TipoTarefa.objects.all().delete()
         PrioridadeTarefa.objects.all().delete()
         Tarefa.objects.all().delete()
 
-        # TODO: rodar novamente
-
-        u = User.objects.create(
-            id=1,
-            username='brunourbano',
-            first_name='Bruno',
-            last_name='Urbano',
-            email='teste@gmail.com'
+        u = User.objects.get(
+            username='admin',
         )
+
+        print(u.id)
 
         proj = Projeto.objects.create(
             id=1,

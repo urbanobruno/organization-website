@@ -5,7 +5,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def call_form(form_name, projeto, status):
+def call_form_initial(form_name, projeto, status):
     form = form_name
     form.__init__(initial={
         'projeto': projeto,

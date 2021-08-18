@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import F
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
@@ -85,9 +85,8 @@ def drag_task(request, project_id):
 #     context = {'form': form}
 #     return render(request, 'contacts/contact_page.html', context)
 
-
+# @login_required
 def create_task(request, projeto_id, status):
-    print(request.method)
     p = Projeto.objects.get(pk=projeto_id)
 
     if request.method == 'POST':
@@ -97,16 +96,9 @@ def create_task(request, projeto_id, status):
         })
         if form.is_valid():
             form.save()
-            return redirect('projetos')
+            return HttpResponseRedirect('projetos')
     else:
         form = CreateTask()
 
     context = {'form': form}
     return render(request, 'projetos/base.html', context)
-
-
-
-    print('VIEW CREATE TASK')
-    print('VIEW CREATE TASK')
-    print('VIEW CREATE TASK')
-    print('VIEW CREATE TASK')

@@ -25,7 +25,7 @@ class CreateTask(forms.ModelForm):
             'descricao',
             'tipo',
             'prioridade',
-            'data_final',
+            'data',
             'status',
             'projeto',
         ]

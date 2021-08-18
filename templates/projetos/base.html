@@ -46,6 +46,7 @@
             <div class="row h-100" id="shared_project">
 
                 <!-- TO DO -->
+
                 <div class="col-12 col-md-4 h-100 rounded">
                     <div class="rounded border border-dark">
                         <div class="card-header">
@@ -57,8 +58,8 @@
                                     data-target="#ModalCreateTaskTodo">Create Task
                             </button>
 
-                            {% call_form form_task item 1 as todo_task_form %}
-                            {% include 'projetos/form_todo_task.html' with form=todo_task_form item_id=item.id %}
+                            {% call_form_initial form_task item 1 as todo_task_form %}
+                            {% include 'parciais/form_todo_task.html' with form=todo_task_form item_id=item.id %}
 
                         </div>
                         <div class="card-body">
@@ -67,8 +68,7 @@
                                     <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
                                         <!-- JAVASCRIPT FORM -->
                                         <div class="d-flex w-100 justify-content-between">
-                                            <div class="handle">
-                                                <i class="fas fa-arrows-alt"></i>
+                                            <div>
                                                 {{ tarefa }}
                                             </div>
 
@@ -103,8 +103,9 @@
                                     data-target="#ModalCreateTaskDoing">Create Task
                             </button>
 
-                            {% call_form form_task item 2 as doing_task_form %}
-                            {% include 'projetos/form_doing_task.html' with form=doing_task_form item_id=item.id %}
+                            {% call_form_initial form_task item 2 as doing_task_form %}
+                            {% include 'parciais/form_doing_task.html' with form=doing_task_form item_id=item.id %}
+
 
                         </div>
                         <div class="card-body">
@@ -113,8 +114,7 @@
                                     <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
                                         <!-- JAVASCRIPT FORM -->
                                         <div class="d-flex w-100 justify-content-between">
-                                            <div class="handle">
-                                                <i class="fas fa-arrows-alt"></i>
+                                            <div>
                                                 {{ tarefa }}
                                             </div>
 
@@ -150,8 +150,9 @@
                                     data-target="#ModalCreateTaskDone">Create Task
                             </button>
 
-                            {% call_form form_task item 3 as done_task_form %}
-                            {% include 'projetos/form_done_task.html' with form=done_task_form item_id=item.id %}
+                            {% call_form_initial form_task item 3 as done_task_form %}
+                            {% include 'parciais/form_done_task.html' with form=done_task_form item_id=item.id %}
+
 
                         </div>
                         <div class="card-body">
@@ -159,8 +160,7 @@
                                 {% for tarefa in item.tarefas_done %}
                                     <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <div class="handle">
-                                                <i class="fas fa-arrows-alt"></i>
+                                            <div>
                                                 {{ tarefa }}
                                             </div>
 
@@ -186,92 +186,45 @@
         </div>
     </div>
 
-    <!-- TODO try to group ids together -->
+
     <script>
 
+        const shared_lists = [todo, doing, done];
 
+        var i = 0, len = shared_lists.length;
+        while (i < len) {
+            Sortable.create(shared_lists[i], {
+                group: 'shared',
+                animation: 150,
 
-        Sortable.create(todo, {
-            group: 'shared',
-            handle: '.handle',
-            animation: 150,
+                onEnd: function (evt) {
 
-            onEnd: function (evt) {
+                    $.ajax({
+                        url: "/projeto/drag_task/{{ item.id }}",
+                        data: {
+                            'tarefa': evt.item.id,
+                            'target': evt.to.id,
+                            'index_after': evt.newIndex,
+                        },
+                        success: function (response) {
+                            $("#todo_count").load(location.href + " #todo_count");
+                            $("#doing_count").load(location.href + " #doing_count");
+                            $("#done_count").load(location.href + " #done_count");
+                        },
 
-                $.ajax({
-                    url: "/projeto/drag_task/{{ item.id }}",
-                    data: {
-                        'tarefa': evt.item.id,
-                        'target': evt.to.id,
-                        'index_after': evt.newIndex,
-                    },
-                    success: function (response) {
-                        $("#todo_count").load(location.href + " #todo_count");
-                        $("#doing_count").load(location.href + " #doing_count");
-                        $("#done_count").load(location.href + " #done_count");
-                    },
+                    });
 
-                });
+                }
+            });
 
-            }
-        })
-        ;
+            i++
+        }
 
-        Sortable.create(doing, {
-            group: 'shared',
-            handle: '.handle',
-            animation: 150,
-
-            onEnd: function (evt) {
-
-                $.ajax({
-                    url: "/projeto/drag_task/{{ item.id }}",
-                    data: {
-                        'tarefa': evt.item.id,
-                        'target': evt.to.id,
-                        'index_after': evt.newIndex,
-                    },
-                    success: function (response) {
-                        $("#todo_count").load(location.href + " #todo_count");
-                        $("#doing_count").load(location.href + " #doing_count");
-                        $("#done_count").load(location.href + " #done_count");
-                    },
-
-                });
-
-            }
-
-        });
-
-        Sortable.create(done, {
-            group: 'shared',
-            handle: '.handle',
-            animation: 150,
-
-            onEnd: function (evt) {
-
-                $.ajax({
-                    url: "/projeto/drag_task/{{ item.id }}",
-                    data: {
-                        'tarefa': evt.item.id,
-                        'target': evt.to.id,
-                        'index_after': evt.newIndex,
-                    },
-                    success: function (response) {
-                        $("#todo_count").load(location.href + " #todo_count");
-                        $("#doing_count").load(location.href + " #doing_count");
-                        $("#done_count").load(location.href + " #done_count");
-                    },
-
-                });
-            }
-
-        });
 
     </script>
 
     <script>
-        $('#ModalCreateTaskTodo,#ModalCreateTaskDoing,#ModalCreateTaskDone').on('show.bs.modal', function (event) {
+        $("#ModalCreateTaskTodo,#ModalCreateTaskDoing,#ModalCreateTaskDone").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('whatever') // Extract info from data-* attributes
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -285,11 +238,3 @@
     </script>
 
 {% endblock %}
-
-{#            $.ajax({#}
-{#                url: "/projeto/create_task",#}
-{#                success: function (response) {#}
-{#                    $("#shared_project").load(location.href + " #shared_project");#}
-{#                },#}
-{##}
-{#            });#}
