@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -35,7 +36,6 @@ def adicionar_tipo(request, projeto_id, descricao):
 
 # todo login required
 def drag_task(request, project_id):
-
     tarefa_id = int(request.GET.get('tarefa'))
     target_list = request.GET.get('target')
     index_after = int(request.GET.get('index_after'))
@@ -73,6 +73,7 @@ def drag_task(request, project_id):
 
     return HttpResponse()
 
+
 # def contact_view(request):
 #     if request.method == 'POST':
 #         form = ContactForm(request.POST)
@@ -102,3 +103,34 @@ def create_task(request, projeto_id, status):
 
     context = {'form': form}
     return render(request, 'projetos/base.html', context)
+
+
+# @login_required
+def create_type_task(request, projeto_id):
+    desc = request.POST.get('type', None)
+
+    print(desc)
+    if request.method == "POST":
+        if desc:
+            TipoTarefa.objects.create(
+                descricao=desc,
+                projeto_id=projeto_id
+            )
+
+    return HttpResponseRedirect(reverse('projetos'))
+
+
+# @login_required
+def create_priority_task(request, projeto_id):
+    desc = request.POST.get('priority', None)
+
+    print(desc)
+
+    if request.method == "POST":
+        if desc:
+            PrioridadeTarefa.objects.create(
+                descricao=desc,
+                projeto_id=projeto_id
+            )
+
+    return HttpResponseRedirect(reverse('projetos'))

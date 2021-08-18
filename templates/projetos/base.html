@@ -9,17 +9,35 @@
     <div class="row w-100 h-100 mt-2">
 
         <!-- TIPOS & PRIORIDADES -->
-        <div class="col-12 col-md-2">
+        <div class="col-12 col-md-3 pr-0">
             <div class="container mb-4">
                 <div class="card-header">
                     Tipos
                 </div>
                 <div class="card-body">
-                    <div class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush">
                         {% for tipo in item.tipotarefa_set.all %}
-                            {{ tipo }} <br>
+                            <li class="list-group-item rounded mb-2">
+                                {{ tipo }}
+                            </li>
                         {% endfor %}
-                    </div>
+                        <li class="list-group-item rounded mb-2">
+
+                            <form action="{% url 'create_type_task' item.id %}" id="form_create_type" method="post">
+                                {% csrf_token %}
+                                <label for="input_type">Create new Type of event</label>
+                                <input type="text" placeholder="Type" id="input_type" name="type" required>
+
+                                <button type="button" class="close" aria-label="Close" id="close_button_tp">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+
+                            </form>
+                            <button id="show_button_tp" class="btn btn-success small">Create Type</button>
+
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -31,8 +49,28 @@
                 <div class="card-body">
                     <div class="list-group list-group-flush">
                         {% for prioridade in item.prioridadetarefa_set.all %}
-                            {{ prioridade }} <br>
+                            <li class="list-group-item rounded mb-2">
+                                {{ prioridade }}
+                            </li>
                         {% endfor %}
+                        <li class="list-group-item rounded mb-2">
+
+                            <form action="{% url 'create_priority_task' item.id %}" id="form_create_priority"
+                                  method="post">
+                                {% csrf_token %}
+                                <label for="input_priority">Create new Priority</label>
+                                <input type="text" placeholder="Priority" id="input_priority" name="priority" required>
+
+                                <button type="button" class="close" aria-label="Close" id="close_button_pr">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+
+                            </form>
+                            <button id="show_button_pr" class="btn btn-success small">Create Priority</button>
+
+                        </li>
+
                     </div>
                 </div>
 
@@ -42,7 +80,7 @@
 
 
         <!-- ROW -->
-        <div class="col-12 col-md-10">
+        <div class="col-12 col-md-9">
             <div class="row h-100" id="shared_project">
 
                 <!-- TO DO -->
@@ -234,6 +272,37 @@
             modal.find('.modal-title').text('New message to ' + recipient)
             modal.find('.modal-body input').val(recipient)
         })
+
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#form_create_type").hide();
+            $("#form_create_priority").hide();
+
+        });
+
+        $("#show_button_tp").click(function () {
+            $("#form_create_type").show();
+            $("#show_button_tp").hide();
+        });
+
+        $("#close_button_tp").click(function () {
+            $("#form_create_type").hide();
+            $("#show_button_tp").show();
+        });
+
+        $("#show_button_pr").click(function () {
+            $("#form_create_priority").show();
+            $("#show_button_pr").hide();
+        });
+
+        $("#close_button_pr").click(function () {
+            $("#form_create_priority").hide();
+            $("#show_button_pr").show();
+        });
+
 
     </script>
 

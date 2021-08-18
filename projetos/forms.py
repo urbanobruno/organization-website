@@ -34,3 +34,4 @@ class CreateTask(forms.ModelForm):
             'projeto': HiddenInput,
         }
 
+
