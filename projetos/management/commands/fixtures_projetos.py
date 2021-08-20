@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand
-from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto
+from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto, ListaTarefas
 from random import randint
 
 
@@ -10,6 +10,7 @@ class Command(BaseCommand):
 
         # User.objects.all().delete()
         Projeto.objects.all().delete()
+        ListaTarefas.objects.all().delete()
         TipoTarefa.objects.all().delete()
         PrioridadeTarefa.objects.all().delete()
         Tarefa.objects.all().delete()
@@ -24,6 +25,24 @@ class Command(BaseCommand):
             id=1,
             nome='Projeto 1',
             usuario_id=u.id,
+        )
+
+        lista_tarefa_todo = ListaTarefas.objects.create(
+            nome='Lista Done',
+            projeto_id=proj.id,
+            numero=1,
+        )
+
+        lista_tarefa_doing = ListaTarefas.objects.create(
+            nome='Lista Doing',
+            projeto_id=proj.id,
+            numero=1,
+        )
+
+        lista_tarefa_done = ListaTarefas.objects.create(
+            nome='Lista Done',
+            projeto_id=proj.id,
+            numero=1,
         )
 
         list_prioridade = [
@@ -74,8 +93,7 @@ class Command(BaseCommand):
                 descricao=f'Descricao TD {x}',
                 tipo_id=randint(1, 3),
                 prioridade_id=randint(1, 3),
-                status=1,
-                projeto_id=proj.id,
+                lista_id=lista_tarefa_todo.id,
                 ordem=x
             ))
 
@@ -85,8 +103,7 @@ class Command(BaseCommand):
                 descricao=f'Descricao Dg {x}',
                 tipo_id=randint(1, 3),
                 prioridade_id=randint(1, 3),
-                status=2,
-                projeto_id=proj.id,
+                lista_id=lista_tarefa_doing.id,
                 ordem=x
             ))
 
@@ -96,8 +113,7 @@ class Command(BaseCommand):
                 descricao=f'Descricao Dn {x}',
                 tipo_id=randint(1, 3),
                 prioridade_id=randint(1, 3),
-                status=3,
-                projeto_id=proj.id,
+                lista_id=lista_tarefa_done.id,
                 ordem=x
             ))
 

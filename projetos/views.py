@@ -7,34 +7,25 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
 
-from projetos.forms import CreateTask
+# from projetos.forms import CreateTask
 from projetos.models import Projeto, PrioridadeTarefa, Tarefa, TipoTarefa
 
 
-# @login_required
+# @login_required todo
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
 
-    form_task = CreateTask
+    # form_task = CreateTask
 
     context = {
         'item': projeto,
-        'form_task': form_task,
+        # 'form_task': form_task,
     }
 
     return render(request, 'projetos/base.html', context=context)
 
 
-@login_required
-def adicionar_tipo(request, projeto_id, descricao):
-    pass
-    # TipoTarefa.objects.create(
-    #     descricao=descricao,
-    #     projeto_id=projeto_id,
-    # )
-
-
-# todo login required
+# @login_required todo
 def drag_task(request, project_id):
     tarefa_id = int(request.GET.get('tarefa'))
     target_list = request.GET.get('target')
@@ -46,7 +37,6 @@ def drag_task(request, project_id):
         'done': 3,
     }
 
-    # TODO: test with only one task
 
     try:
         new_order = Tarefa.objects.filter(
@@ -86,51 +76,53 @@ def drag_task(request, project_id):
 #     context = {'form': form}
 #     return render(request, 'contacts/contact_page.html', context)
 
-# @login_required
+# @login_required todo
 def create_task(request, projeto_id, status):
     p = Projeto.objects.get(pk=projeto_id)
 
-    if request.method == 'POST':
-        form = CreateTask(request.POST, initial={
-            'projeto': p,
-            'status': status
-        })
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('projetos')
-    else:
-        form = CreateTask()
+    print(request.method)
+    print('TESTANDO')
+    print('TESTANDO')
 
-    context = {'form': form}
-    return render(request, 'projetos/base.html', context)
+    # if request.method == 'POST':
+    #     form = CreateTask(request.POST, initial={
+    #         'projeto': p,
+    #         'status': status
+    #     })
+    #     if form.is_valid():
+    #         form.save()
+
+    return HttpResponseRedirect(reverse('projetos'))
 
 
-# @login_required
-def create_type_task(request, projeto_id):
+# @login_required todo
+# @require_POST
+def create_type_task(request, project_id):
     desc = request.POST.get('type', None)
 
     print(desc)
+    print(request.method)
+
     if request.method == "POST":
         if desc:
             TipoTarefa.objects.create(
                 descricao=desc,
-                projeto_id=projeto_id
+                projeto_id=project_id
             )
 
     return HttpResponseRedirect(reverse('projetos'))
 
 
-# @login_required
-def create_priority_task(request, projeto_id):
+# @login_required todo
+# @require_POST
+def create_priority_task(request, project_id):
     desc = request.POST.get('priority', None)
-
-    print(desc)
 
     if request.method == "POST":
         if desc:
             PrioridadeTarefa.objects.create(
                 descricao=desc,
-                projeto_id=projeto_id
+                projeto_id=project_id
             )
 
     return HttpResponseRedirect(reverse('projetos'))

@@ -2,7 +2,11 @@
 {% load static %}
 {% load tags_project %}
 
-<link href="{% static 'handle_style.css' %}">
+
+{% block title %}
+    {{ item }}
+{% endblock %}
+
 
 {% block content %}
 
@@ -17,11 +21,11 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         {% for tipo in item.tipotarefa_set.all %}
-                            <li class="list-group-item rounded mb-2">
+                            <li class="list-group-item rounded">
                                 {{ tipo }}
                             </li>
                         {% endfor %}
-                        <li class="list-group-item rounded mb-2">
+                        <li class="list-group-item rounded">
 
                             <form action="{% url 'create_type_task' item.id %}" id="form_create_type" method="post">
                                 {% csrf_token %}
@@ -31,7 +35,8 @@
                                 <button type="button" class="close" aria-label="Close" id="close_button_tp">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-check-circle"></i>
+                                </button>
 
                             </form>
                             <button id="show_button_tp" class="btn btn-success small">Create Type</button>
@@ -49,11 +54,11 @@
                 <div class="card-body">
                     <div class="list-group list-group-flush">
                         {% for prioridade in item.prioridadetarefa_set.all %}
-                            <li class="list-group-item rounded mb-2">
+                            <li class="list-group-item rounded">
                                 {{ prioridade }}
                             </li>
                         {% endfor %}
-                        <li class="list-group-item rounded mb-2">
+                        <li class="list-group-item rounded">
 
                             <form action="{% url 'create_priority_task' item.id %}" id="form_create_priority"
                                   method="post">
@@ -64,7 +69,9 @@
                                 <button type="button" class="close" aria-label="Close" id="close_button_pr">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+
+                                <button type="submit" class="btn btn-success"><i class="fas fa-check-circle"></i>
+                                </button>
 
                             </form>
                             <button id="show_button_pr" class="btn btn-success small">Create Priority</button>
@@ -83,145 +90,51 @@
         <div class="col-12 col-md-9">
             <div class="row h-100" id="shared_project">
 
-                <!-- TO DO -->
-
-                <div class="col-12 col-md-4 h-100 rounded">
-                    <div class="rounded border border-dark">
-                        <div class="card-header">
-                            To Do
-                            <span class="badge bg-dark rounded-pill text-white ml-1" id="todo_count">
-                                {{ item.tarefas_to_do.count }}
+                {% for lista in item.listatarefas_set.all %}
+                    <div class="w-25 h-100 rounded mr-2 ml-2">
+                        <div class="rounded border border-dark">
+                            <div class="card-header">
+                                {{ lista.nome|capfirst }}
+                                <span class="badge bg-dark rounded-pill text-white ml-1" id="todo_count">
+                                {{ lista.tarefa_set.all.count }}
                             </span>
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                                    data-target="#ModalCreateTaskTodo">Create Task
-                            </button>
+                                <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                        data-target="#ModalCreateTaskTodo">Create Task
+                                </button>
 
-                            {% call_form_initial form_task item 1 as todo_task_form %}
-                            {% include 'parciais/form_todo_task.html' with form=todo_task_form item_id=item.id %}
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group" id="{{ lista.nome }}">
+                                    {% for tarefa in lista.tarefa_set.all %}
+                                        <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <div>
+                                                    {{ tarefa }}
+                                                </div>
 
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group" id="todo">
-                                {% for tarefa in item.tarefas_to_do %}
-                                    <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
-                                        <!-- JAVASCRIPT FORM -->
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                {{ tarefa }}
                                             </div>
+                                            <p class="mb-1 small">
+                                                <b>Tipo:</b> {{ tarefa.tipo }} <br>
+                                                <b>Prioridade:</b> {{ tarefa.prioridade }}
+                                            </p>
+                                            <small>
+                                                {% if tarefa.data %}{{ tarefa.data }}{% endif %}
+                                            </small>
+                                        </li>
 
-                                        </div>
-                                        <p class="mb-1 small">
-                                            <b>Tipo:</b> {{ tarefa.tipo }} <br>
-                                            <b>Prioridade:</b> {{ tarefa.prioridade }}
-
-                                        </p>
-                                        <small>
-                                            {% if tarefa.data_final %}<br>Data de Final:
-                                                {{ tarefa.data_final }}{% endif %}
-                                        </small>
-                                    </li>
-
-                                {% endfor %}
-                            </ul>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-
-                <!-- DOING -->
-                <div class="col-12 col-md-4 h-100 rounded">
-                    <div class="rounded border border-dark">
-                        <div class="card-header">
-                            Doing
-                            <span class="badge bg-dark rounded-pill text-white ml-1" id="doing_count">
-                                {{ item.tarefas_doing.count }}
-                            </span>
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                                    data-target="#ModalCreateTaskDoing">Create Task
-                            </button>
-
-                            {% call_form_initial form_task item 2 as doing_task_form %}
-                            {% include 'parciais/form_doing_task.html' with form=doing_task_form item_id=item.id %}
-
-
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group" id="doing">
-                                {% for tarefa in item.tarefas_doing %}
-                                    <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
-                                        <!-- JAVASCRIPT FORM -->
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                {{ tarefa }}
-                                            </div>
-
-                                        </div>
-                                        <p class="mb-1 small">
-                                            <b>Tipo:</b> {{ tarefa.tipo }} <br>
-                                            <b>Prioridade:</b> {{ tarefa.prioridade }}
-
-                                        </p>
-                                        <small>
-                                            {% if tarefa.data_final %}<br>Data de Final:
-                                                {{ tarefa.data_final }}{% endif %}
-                                        </small>
-                                    </li>
-
-                                {% endfor %}
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <!-- DONE -->
-                <div class="col-12 col-md-4 h-100 rounded">
-                    <div class="rounded border border-dark">
-                        <div class="card-header">
-                            Done
-                            <span class="badge bg-dark rounded-pill text-white ml-1" id="done_count">
-                                {{ item.tarefas_done.count }}
-                            </span>
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                                    data-target="#ModalCreateTaskDone">Create Task
-                            </button>
-
-                            {% call_form_initial form_task item 3 as done_task_form %}
-                            {% include 'parciais/form_done_task.html' with form=done_task_form item_id=item.id %}
-
-
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group" id="done">
-                                {% for tarefa in item.tarefas_done %}
-                                    <li class="list-group-item rounded mb-2" id="{{ tarefa.id }}">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                {{ tarefa }}
-                                            </div>
-
-                                        </div>
-                                        <p class="mb-1 small">
-                                            <b>Tipo:</b> {{ tarefa.tipo }} <br>
-                                            <b>Prioridade:</b> {{ tarefa.prioridade }}
-
-                                        </p>
-                                        <small>
-                                            {% if tarefa.data_final %}<br>Data de Final:
-                                                {{ tarefa.data_final }}{% endif %}
-                                        </small>
-                                    </li>
-
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {% empty %}
+                    <!-- TODO -->
+                    COLOCAR PARA CRIAR UMA LISTA
+                {% endfor %}
 
             </div>
         </div>
+
     </div>
 
 
@@ -264,9 +177,12 @@
     <script>
         $("#ModalCreateTaskTodo,#ModalCreateTaskDoing,#ModalCreateTaskDone").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever') // Extract info from data-* attributes
+            {#var recipient = button.data('whatever') // Extract info from data-* attributes#}
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+
+            console.log("TESTANDO")
+            console.log("TESTANDO")
 
             var modal = $(this)
             modal.find('.modal-title').text('New message to ' + recipient)

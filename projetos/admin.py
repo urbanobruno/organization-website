@@ -28,8 +28,7 @@ class TarefaAdmin(admin.ModelAdmin):
         'tipo',
         'prioridade',
         'data',
-        'status',
-        'projeto',
+        'lista',
         'ordem',
     )
     list_display_links = (
@@ -41,8 +40,6 @@ class TarefaAdmin(admin.ModelAdmin):
         'tipo',
         'prioridade',
         'data',
-        'status',
-        'ordem',
     )
 
 
