@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand
-from projetos.models import Tarefa, TipoTarefa, PrioridadeTarefa, Projeto, ListaTarefas
+from projetos.models import Tarefa, TipoTarefaProjeto, PrioridadeTarefaProjeto, Projeto, ListaTarefas
 from random import randint
 
 
@@ -8,27 +8,28 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        if not User.objects.all().exists():
+            u = User.objects.create_superuser(
+                username='admin',
+                password='admin',
+                email='bruno.urbano.rocha@gmail.com',
+            )
+        else:
+            u = User.objects.all().first()
         # User.objects.all().delete()
         Projeto.objects.all().delete()
         ListaTarefas.objects.all().delete()
-        TipoTarefa.objects.all().delete()
-        PrioridadeTarefa.objects.all().delete()
+        TipoTarefaProjeto.objects.all().delete()
+        PrioridadeTarefaProjeto.objects.all().delete()
         Tarefa.objects.all().delete()
 
-        u = User.objects.get(
-            username='admin',
-        )
-
-        print(u.id)
-
         proj = Projeto.objects.create(
-            id=1,
             nome='Projeto 1',
             usuario_id=u.id,
         )
 
         lista_tarefa_todo = ListaTarefas.objects.create(
-            nome='Lista Done',
+            nome='Lista Todo',
             projeto_id=proj.id,
             numero=1,
         )
@@ -36,13 +37,13 @@ class Command(BaseCommand):
         lista_tarefa_doing = ListaTarefas.objects.create(
             nome='Lista Doing',
             projeto_id=proj.id,
-            numero=1,
+            numero=2,
         )
 
         lista_tarefa_done = ListaTarefas.objects.create(
             nome='Lista Done',
             projeto_id=proj.id,
-            numero=1,
+            numero=3,
         )
 
         list_prioridade = [
@@ -55,15 +56,14 @@ class Command(BaseCommand):
         x = 1
         for p in list_prioridade:
             lista.append(
-                PrioridadeTarefa(
-                    id=x,
+                PrioridadeTarefaProjeto(
                     descricao=p,
                     projeto_id=proj.id,
                 )
             )
             x += 1
 
-        PrioridadeTarefa.objects.bulk_create(lista)
+        PrioridadeTarefaProjeto.objects.bulk_create(lista)
 
         list_tipos = [
             'Evento',
@@ -75,20 +75,20 @@ class Command(BaseCommand):
         x = 1
         for t in list_tipos:
             lista.append(
-                TipoTarefa(
-                    id=x,
+                TipoTarefaProjeto(
                     descricao=t,
                     projeto_id=proj.id,
                 )
             )
             x += 1
 
-        TipoTarefa.objects.bulk_create(lista)
+        TipoTarefaProjeto.objects.bulk_create(lista)
 
         lista_criar = []
 
         for x in range(1, 5):
             lista_criar.append(Tarefa(
+                projeto_id=proj.id,
                 titulo=f'Todo {x}',
                 descricao=f'Descricao TD {x}',
                 tipo_id=randint(1, 3),
@@ -99,6 +99,7 @@ class Command(BaseCommand):
 
         for x in range(6, 10):
             lista_criar.append(Tarefa(
+                projeto_id=proj.id,
                 titulo=f'Doing {x}',
                 descricao=f'Descricao Dg {x}',
                 tipo_id=randint(1, 3),
@@ -109,6 +110,7 @@ class Command(BaseCommand):
 
         for x in range(11, 15):
             lista_criar.append(Tarefa(
+                projeto_id=proj.id,
                 titulo=f'Done {x}',
                 descricao=f'Descricao Dn {x}',
                 tipo_id=randint(1, 3),

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TipoTarefa, PrioridadeTarefa, Tarefa, Projeto
+from .models import TipoTarefaProjeto, PrioridadeTarefaProjeto, Tarefa, Projeto
 
 
 class ProjetoAdmin(admin.ModelAdmin):
@@ -8,13 +8,13 @@ class ProjetoAdmin(admin.ModelAdmin):
     list_editable = ('nome', )
 
 
-class TipoTarefaAdmin(admin.ModelAdmin):
+class TipoTarefaProjetoAdmin(admin.ModelAdmin):
     list_display = ('id', 'descricao')
     list_display_links = ('id', )
     list_editable = ('descricao',)
 
 
-class PrioridadeTarefaAdmin(admin.ModelAdmin):
+class PrioridadeTarefaProjetoAdmin(admin.ModelAdmin):
     list_display = ('id', 'descricao')
     list_display_links = ('id', )
     list_editable = ('descricao',)
@@ -43,7 +43,7 @@ class TarefaAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(TipoTarefa, TipoTarefaAdmin)
-admin.site.register(PrioridadeTarefa, PrioridadeTarefaAdmin)
+admin.site.register(TipoTarefaProjeto, TipoTarefaProjetoAdmin)
+admin.site.register(PrioridadeTarefaProjeto, PrioridadeTarefaProjetoAdmin)
 admin.site.register(Tarefa, TarefaAdmin)
 admin.site.register(Projeto, ProjetoAdmin)

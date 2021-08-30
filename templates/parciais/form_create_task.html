@@ -1,14 +1,14 @@
 
 {% load crispy_forms_filters %}
 
-<form id="create_task_doing_form" role="form" method="post" action="{% url 'create_task' item_id 2 %}" >
+<form id="create_task_form" role="form" method="post" action="{% url 'create_task' lista_id %}" >
     {% csrf_token %}
-    <div class="modal fade" id="ModalCreateTaskDoing" tabindex="-1" role="dialog" aria-labelledby="ModalTaskLabelDoing"
+    <div class="modal fade" id="ModalCreateTask{{ lista_id }}" tabindex="-1" role="dialog" aria-labelledby="CreateTaskLabel{{ lista_id }}"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalTaskLabelDoing">New Task</h5>
+                    <h5 class="modal-title" id="CreateTaskLabel{{ lista_id }}">New Task</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

@@ -6,58 +6,96 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
-
-# from projetos.forms import CreateTask
-from projetos.models import Projeto, PrioridadeTarefa, Tarefa, TipoTarefa
+from django.contrib import messages
+from projetos.forms import CreateTaskForm
+from projetos.models import Projeto, PrioridadeTarefaProjeto, Tarefa, TipoTarefaProjeto, ListaTarefas
 
 
 # @login_required todo
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
 
-    # form_task = CreateTask
+    form = CreateTaskForm(initial={
+        'projeto': projeto
+    })
+
+
 
     context = {
         'item': projeto,
-        # 'form_task': form_task,
+        'form_create_task': form
     }
 
     return render(request, 'projetos/base.html', context=context)
 
 
 # @login_required todo
-def drag_task(request, project_id):
-    tarefa_id = int(request.GET.get('tarefa'))
+def drag_list(request):
+    list_id = int(request.GET.get('list_id'))
     target_list = request.GET.get('target')
     index_after = int(request.GET.get('index_after'))
 
-    dictionary = {
-        'todo': 1,
-        'doing': 2,
-        'done': 3,
-    }
+    print(list_id)
+    print(target_list)
+    print(index_after)
 
+    lista = ListaTarefas.objects.get(id=list_id)
+
+    # try:
+    #     new_numero = Tarefa.objects.filter(
+    #         projeto_id=project_id,
+    #         status__gte=dictionary[target_list],
+    #     )[index_after].ordem
+    # except IndexError:
+    #     new_numero = Tarefa.objects.filter(
+    #         projeto_id=project_id,
+    #         status__lte=dictionary[target_list],
+    #     ).last().ordem
+    #
+    # Tarefa.objects.filter(
+    #     id=tarefa_id
+    # ).update(
+    #     status=dictionary[target_list],
+    #     ordem=new_order
+    # )
+    #
+    # Tarefa.objects.filter(
+    #     projeto_id=project_id,
+    #     ordem__gte=new_order,
+    # ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
+
+    return HttpResponse()
+
+
+# @login_required todo
+def drag_task(request, project_id):
+    tarefa_id = int(request.GET.get('tarefa_id'))
+    target_list = int(request.GET.get('target'))
+    index_after = int(request.GET.get('index_after'))
+
+    # Todo: check with one task
 
     try:
         new_order = Tarefa.objects.filter(
             projeto_id=project_id,
-            status__gte=dictionary[target_list],
+            lista__numero__gte=target_list,
         )[index_after].ordem
     except IndexError:
         new_order = Tarefa.objects.filter(
             projeto_id=project_id,
-            status__lte=dictionary[target_list],
+            lista__numero__lte=target_list,
         ).last().ordem
 
     Tarefa.objects.filter(
         id=tarefa_id
     ).update(
-        status=dictionary[target_list],
+        lista_id=ListaTarefas.objects.get(projeto_id=project_id, numero=target_list),
         ordem=new_order
     )
 
     Tarefa.objects.filter(
         projeto_id=project_id,
+        lista__isnull=False,
         ordem__gte=new_order,
     ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
 
@@ -77,12 +115,36 @@ def drag_task(request, project_id):
 #     return render(request, 'contacts/contact_page.html', context)
 
 # @login_required todo
-def create_task(request, projeto_id, status):
-    p = Projeto.objects.get(pk=projeto_id)
+def create_task(request, lista_id):
+    lista = ListaTarefas.objects.get(id=lista_id)
+    projeto = lista.projeto
 
-    print(request.method)
-    print('TESTANDO')
-    print('TESTANDO')
+    if request.method == 'POST':
+        form = CreateTaskForm(request.POST, initial={
+            'projeto': projeto
+        })
+
+        form.instance.lista_id = lista_id
+        form.instance.ordem = lista.tarefa_set.first().ordem
+
+        Tarefa.objects.filter(
+            lista__numero__gte=lista.numero,
+        ).update(ordem=F('ordem') + 1)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'Task create successfully')
+
+            return HttpResponseRedirect(reverse('projetos'))
+
+    # form = CreateTaskForm()
+    #
+    # return render(request, 'parciais/form_create_task.html',
+    #               {
+    #                   'form': form,
+    #                   'lista_id': lista_id
+    #               })
 
     # if request.method == 'POST':
     #     form = CreateTask(request.POST, initial={
@@ -92,7 +154,7 @@ def create_task(request, projeto_id, status):
     #     if form.is_valid():
     #         form.save()
 
-    return HttpResponseRedirect(reverse('projetos'))
+    # return HttpResponseRedirect(reverse('projetos'))
 
 
 # @login_required todo
@@ -105,7 +167,7 @@ def create_type_task(request, project_id):
 
     if request.method == "POST":
         if desc:
-            TipoTarefa.objects.create(
+            TipoTarefaProjeto.objects.create(
                 descricao=desc,
                 projeto_id=project_id
             )
@@ -120,9 +182,33 @@ def create_priority_task(request, project_id):
 
     if request.method == "POST":
         if desc:
-            PrioridadeTarefa.objects.create(
+            PrioridadeTarefaProjeto.objects.create(
                 descricao=desc,
                 projeto_id=project_id
             )
 
     return HttpResponseRedirect(reverse('projetos'))
+
+
+def edit_type(request, type_id):
+    pass
+
+
+def delete_type(request, type_id):
+    return HttpResponse()
+
+
+def edit_priority(request, priority_id):
+    pass
+
+
+def delete_priority(request, priority_id):
+    return HttpResponse()
+
+
+def edit_list(request, lista_id):
+    pass
+
+
+def delete_list(request, lista_id):
+    return HttpResponse()
