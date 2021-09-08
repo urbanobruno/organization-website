@@ -1,10 +1,14 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('',
          views.base_projetos,
          name='projetos'),
+    path('create_modal',
+         views.create_modal,
+         name='create_modal'),
     path('drag_list',
          views.drag_list,
          name='drag_list'),

@@ -2,16 +2,16 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 
+
 # TIPO E PRIORIDADE COMO ETIQUETAS QUE PODE ADICIONAR A UMA TAREFA
 # CADA TIPO E PRIORIDADE TEM UMA COR RANDOMIZADA QUE DEPOIS PODE SER ESCOLHIDA
-
-
 
 
 class Projeto(models.Model):
     nome = models.CharField(max_length=100)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    # para usar universalmente
+
+    # to use universally
     # tipo = models.ManyToManyField('TipoTarefaProjeto', blank=True)
     # tipo = models.ManyToManyField('PrioridadeTarefaProjeto', blank=True)
 
@@ -83,4 +83,3 @@ class Tarefa(models.Model):
 
     def __str__(self):
         return f'{self.titulo}'
-

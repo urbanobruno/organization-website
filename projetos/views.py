@@ -19,14 +19,53 @@ def base_projetos(request):
         'projeto': projeto
     })
 
-
-
     context = {
         'item': projeto,
         'form_create_task': form
     }
 
     return render(request, 'projetos/base.html', context=context)
+
+
+def create_modal(request):
+    print('Testando')
+    params = {
+        'url': request.GET.get('url'),
+        'form': request.GET.get('form'),
+        'target': request.GET.get('target_id'),
+        'title': request.GET.get('title'),
+        'edit': request.GET.get('edit', False),
+    }
+    response = render(request,
+                      'parciais/create_forms.html',
+                      context=params)
+
+    response['X-IC-Script'] = f"$(#{params['target_id']}).modal('show')"
+
+    return response
+
+    # <script>
+    #     $('*[id*=Modal]').each(function () {
+    #         $(this.id).on('show.bs.modal', function (event) {
+    #             var button = $(event.relatedTarget) // Button that triggered the modal
+    #             {#var recipient = button.data('whatever') // Extract info from data-* attributes#}
+    #             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    #             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    #
+    #             console.log("TESTANDO")
+    #             console.log("TESTANDO")
+    #
+    #             var modal = $(this)
+    #             modal.find('.modal-title').text('New message to ' + recipient)
+    #             modal.find('.modal-body input').val(recipient)
+    #         })
+    #
+    #         console.log(this);
+    #         console.log(this.id);
+    #         console.log($(this))
+    #     });
+    #
+    # </script>
 
 
 # @login_required todo

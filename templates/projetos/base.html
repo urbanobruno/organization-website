@@ -40,8 +40,9 @@
                                 <form action="{% url 'create_type_task' item.id %}" id="form_create_type" method="post">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label for="type" class="w-100 text-center"><b>Create new Type of
-                                            event</b></label>
+                                        <label for="type" class="w-100 text-center">
+                                            <b>Create new Type of event</b>
+                                        </label>
                                         <input type="text" placeholder="Type" id="type" name="type" class="form-control"
                                                required>
                                     </div>
@@ -147,9 +148,20 @@
                                             data-target="#ModalCreateTask{{ lista.id }}">
                                         Create Task
                                     </button>
+{#                                    <button class="dropdown-item"#}
+{#                                            ic-get-from="{% url 'create_modal' %}"#}
+{#                                            ic-target="#ModalCreateTask{{ lista.id }}"#}
+{#                                            ic-deps="ignore"#}
+{#                                            ic-include='{#}
+{#                        "url":"{% url "create_task" lista.id %}",#}
+{#                        "form": {{ form_create_task }},#}
+{#                        "target": "ModalCreateTask{{ lista.id }}",#}
+{#                        "title":"Create New Task"}'#}
+{#                                    >CREATE TASK MODAL</button>#}
 
-                                    <a class="dropdown-item" href="{% url 'edit_list' lista.id %}">Edit List</a>
-                                    <a class="dropdown-item" href="{% url 'delete_list' lista.id %}">Delete List</a>
+                                            <a class="dropdown-item" href="{% url 'edit_list' lista.id %}">Edit List</a>
+                                            <a class="dropdown-item" href="{% url 'delete_list' lista.id %}">Delete
+                                                List</a>
                                 </div>
 
                                 {% include 'parciais/form_create_task.html' with form=form_create_task lista_id=lista.id %}
