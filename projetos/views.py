@@ -11,6 +11,11 @@ from projetos.forms import CreateTaskForm
 from projetos.models import Projeto, PrioridadeTarefaProjeto, Tarefa, TipoTarefaProjeto, ListaTarefas
 
 
+def create_form_html():
+    pass
+
+
+
 # @login_required todo
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
