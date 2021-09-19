@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 {% load tags_project %}
+{% load crispy_forms_filters %}
 
 
 {% block title %}
@@ -125,7 +126,6 @@
 
             </div>
 
-
             <!-- ROW -->
             <div class="col-12 col-md-9">
 
@@ -148,23 +148,26 @@
                                             data-target="#ModalCreateTask{{ lista.id }}">
                                         Create Task
                                     </button>
-{#                                    <button class="dropdown-item"#}
-{#                                            ic-get-from="{% url 'create_modal' %}"#}
-{#                                            ic-target="#ModalCreateTask{{ lista.id }}"#}
-{#                                            ic-deps="ignore"#}
-{#                                            ic-include='{#}
-{#                        "url":"{% url "create_task" lista.id %}",#}
-{#                        "form": {{ form_create_task }},#}
-{#                        "target": "ModalCreateTask{{ lista.id }}",#}
-{#                        "title":"Create New Task"}'#}
-{#                                    >CREATE TASK MODAL</button>#}
 
-                                            <a class="dropdown-item" href="{% url 'edit_list' lista.id %}">Edit List</a>
-                                            <a class="dropdown-item" href="{% url 'delete_list' lista.id %}">Delete
-                                                List</a>
+                                    <button class="dropdown-item"
+                                            ic-get-from="{% url 'create_task' lista.id %}"
+                                            ic-target="#form-container"
+                                            ic-deps="ignore"
+                                            ic-include='{
+                                                "url":"{% url "create_task" lista.id %}",
+                                                "title":"Create New Task"}'
+
+                                    >CREATE TASK MODAL - {{ item.get_object }}
+                                    </button>
+                                    {#let myModal = new bootstrap.Modal(document.getElementById('myModal'), {});#}
+                                    {#myModal.show();#}
+
+                                    <a class="dropdown-item" href="{% url 'edit_list' lista.id %}">Edit List</a>
+                                    <a class="dropdown-item" href="{% url 'delete_list' lista.id %}">Delete
+                                        List</a>
                                 </div>
 
-                                {% include 'parciais/form_create_task.html' with form=form_create_task lista_id=lista.id %}
+                                {#                                {% include 'parciais/form_create_task.html' with form=form_create_task lista_id=lista.id %}#}
 
                             </div>
                             <div class="card-body">
@@ -199,6 +202,13 @@
 
         </div>
     </div>
+
+    <form>
+        <div class="form-container" id="form-container">
+
+        </div>
+    </form>
+
     <script>
 
         var elements_lists = document.getElementsByClassName("sort_lists")
@@ -266,30 +276,25 @@
 
     </script>
 
-    <script>
-        $('*[id*=Modal]').each(function () {
-            $(this.id).on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) // Button that triggered the modal
-                {#var recipient = button.data('whatever') // Extract info from data-* attributes#}
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    {#    <script>#}
 
-                console.log("TESTANDO")
-                console.log("TESTANDO")
-
-                var modal = $(this)
-                modal.find('.modal-title').text('New message to ' + recipient)
-                modal.find('.modal-body input').val(recipient)
-            })
-
-            console.log(this);
-            console.log(this.id);
-            console.log($(this))
-        });
-
-    </script>
+    {##}
+    {#        $('#modal_target').on('show.bs.modal', function (event) {#}
+    {#            var button = $(event.relatedTarget) // Button that triggered the modal#}
+    {#var recipient = button.data('whatever') // Extract info from data-* attributes#}
+    {#            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).#}
+    {#            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.#}
+    {##}
+    {#            console.log("TESTANDO")#}
+    {#            console.log("TESTANDO")#}
+    {##}
+    {#            var modal = $(this)#}
+    {#modal.find('.modal-title').text('New message to ' + recipient)#}
+    {#modal.find('.modal-body input').val(recipient)#}
+    {#        })#}
 
 
+    {#    </script>#}
 
     <script>
 

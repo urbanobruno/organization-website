@@ -7,47 +7,26 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from projetos import forms
+from ast import literal_eval
 from projetos.forms import CreateTaskForm
 from projetos.models import Projeto, PrioridadeTarefaProjeto, Tarefa, TipoTarefaProjeto, ListaTarefas
-
-
-def create_form_html():
-    pass
-
 
 
 # @login_required todo
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
 
-    form = CreateTaskForm(initial={
-        'projeto': projeto
-    })
+    # form = CreateTaskForm(initial={
+    #     'projeto': projeto
+    # })
 
     context = {
         'item': projeto,
-        'form_create_task': form
+        # 'form_create_task': form
     }
 
     return render(request, 'projetos/base.html', context=context)
-
-
-def create_modal(request):
-    print('Testando')
-    params = {
-        'url': request.GET.get('url'),
-        'form': request.GET.get('form'),
-        'target': request.GET.get('target_id'),
-        'title': request.GET.get('title'),
-        'edit': request.GET.get('edit', False),
-    }
-    response = render(request,
-                      'parciais/create_forms.html',
-                      context=params)
-
-    response['X-IC-Script'] = f"$(#{params['target_id']}).modal('show')"
-
-    return response
 
     # <script>
     #     $('*[id*=Modal]').each(function () {
@@ -163,17 +142,19 @@ def create_task(request, lista_id):
     lista = ListaTarefas.objects.get(id=lista_id)
     projeto = lista.projeto
 
+    print('OK CHAMOU A VIEW')
+
     if request.method == 'POST':
         form = CreateTaskForm(request.POST, initial={
             'projeto': projeto
         })
 
         form.instance.lista_id = lista_id
-        form.instance.ordem = lista.tarefa_set.first().ordem
+        # form.instance.ordem = lista.tarefa_set.first().ordem
 
-        Tarefa.objects.filter(
-            lista__numero__gte=lista.numero,
-        ).update(ordem=F('ordem') + 1)
+        # Tarefa.objects.filter(
+        #     lista__numero__gte=lista.numero,
+        # ).update(ordem=F('ordem') + 1)
 
         if form.is_valid():
             form.save()
@@ -182,23 +163,29 @@ def create_task(request, lista_id):
 
             return HttpResponseRedirect(reverse('projetos'))
 
-    # form = CreateTaskForm()
-    #
-    # return render(request, 'parciais/form_create_task.html',
-    #               {
-    #                   'form': form,
-    #                   'lista_id': lista_id
-    #               })
+    form = CreateTaskForm(initial={
+        'projeto': projeto
+    })
 
-    # if request.method == 'POST':
-    #     form = CreateTask(request.POST, initial={
-    #         'projeto': p,
-    #         'status': status
-    #     })
-    #     if form.is_valid():
-    #         form.save()
+    print(request.build_absolute_uri())
 
-    # return HttpResponseRedirect(reverse('projetos'))
+    context = {
+        'form': form,
+        'url': request.GET.get('url'),
+        'title': request.GET.get('title')
+    }
+
+    print('TENTANDO PELA 999 VEZ CHAMAR O FORM')
+
+    response = render(request, 'parciais/create_forms.html', context=context)
+
+    # todo finish
+    response['X-IC-Script'] = ''
+    response['X-IC-Trigger'] = ''
+    # https://intercoolerjs.org/reference.html
+    # response['X-IC-Script'] = f"$(#{params['target_id']}).modal('show')"
+
+    return response
 
 
 # @login_required todo
