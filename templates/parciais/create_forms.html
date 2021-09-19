@@ -1,35 +1,21 @@
-
 {% load crispy_forms_filters %}
 
-<form id="create_modal_form" role="form" method="post" action="{{ url }}" >
+<form id="create_modal_form" role="form" method="post" action="{{ url }}">
     {% csrf_token %}
-    <div class="modal fade" id="modal_target" tabindex="-1" role="dialog" aria-labelledby="form_label"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="form_label">{{ title }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {{ form|crispy }}
-                </div>
-                <div class="modal-footer"> <!-- Save -->
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="form_label">{{ title }}</h5>
+                <button type="button" class="close" id="close_modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form|crispy }}
+            </div>
+            <div class="modal-footer"> <!-- Save -->
+                <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
 </form>
-
-<script>
-    console.log('{{ form }}');
-    console.log('{{ url }}');
-    console.log('{{ title }}');
-
-    $(document).ready(function () {
-        $('#modal_target').modal('show')
-    })
-</script>

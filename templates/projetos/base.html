@@ -151,7 +151,7 @@
 
                                     <button class="dropdown-item"
                                             ic-get-from="{% url 'create_task' lista.id %}"
-                                            ic-target="#form-container"
+                                            ic-target="#modal_base"
                                             ic-deps="ignore"
                                             ic-include='{
                                                 "url":"{% url "create_task" lista.id %}",
@@ -202,12 +202,6 @@
 
         </div>
     </div>
-
-    <form>
-        <div class="form-container" id="form-container">
-
-        </div>
-    </form>
 
     <script>
 
@@ -279,7 +273,7 @@
     {#    <script>#}
 
     {##}
-    {#        $('#modal_target').on('show.bs.modal', function (event) {#}
+    {#        $('#modal_base').on('show.bs.modal', function (event) {#}
     {#            var button = $(event.relatedTarget) // Button that triggered the modal#}
     {#var recipient = button.data('whatever') // Extract info from data-* attributes#}
     {#            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).#}

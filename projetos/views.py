@@ -180,8 +180,10 @@ def create_task(request, lista_id):
     response = render(request, 'parciais/create_forms.html', context=context)
 
     # todo finish
-    response['X-IC-Script'] = ''
-    response['X-IC-Trigger'] = ''
+    # $('#myModal').modal('show');
+
+    response['X-IC-Script'] = '$("#modal_base").modal("show");'
+    # response['X-IC-Trigger'] = ''
     # https://intercoolerjs.org/reference.html
     # response['X-IC-Script'] = f"$(#{params['target_id']}).modal('show')"
 
