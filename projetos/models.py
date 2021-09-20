@@ -22,9 +22,6 @@ class Projeto(models.Model):
     def __str__(self):
         return f'{self.nome}'
 
-    def get_object(self):
-        return super().__str__()
-
 
 class TipoTarefaProjeto(models.Model):
     # Exemplo: pode ser um evento, uma tarefa, um lembrete, etc

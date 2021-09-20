@@ -4,16 +4,63 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from projetos import forms
-from ast import literal_eval
 from projetos.forms import CreateTaskForm
 from projetos.models import Projeto, PrioridadeTarefaProjeto, Tarefa, TipoTarefaProjeto, ListaTarefas
 
 
-# @login_required todo
+def create_modal(
+        request,
+        form,
+        url,
+        title,
+        refresh,
+        obj_instance=None,
+        form_initial=None,
+        func_fix_form=None,
+        success_msg=None,
+):
+    options_form = {'instance': obj_instance}
+    if form_initial:
+        options_form['initial'] = form_initial
+
+    if request.method == 'POST':
+        f = form(request.POST, **options_form)
+
+        if func_fix_form:
+            func_fix_form(form=f)
+
+        if f.is_valid():
+            s = f.save()
+
+            if success_msg:
+                messages.success(request, success_msg)
+
+            response = HttpResponse()
+
+            # todo define ids - make id content of whole page - content
+            # response['X-IC-Script'] = f'Intercooler.refresh($("#{refresh}"));'
+
+            return response
+
+    # todo check if error think has to be post again
+    f = form(**options_form)
+
+    context = {
+        'form': f,
+        'url': url,
+        'title': title
+    }
+
+    response = render(request, 'parciais/create_forms.html', context=context)
+
+    # todo check toggle
+    response['X-IC-Script'] = '$("#modal_base").modal("show");'
+
+    return response
+
+
 def base_projetos(request):
     projeto = Projeto.objects.get(id=1)
 
@@ -27,29 +74,6 @@ def base_projetos(request):
     }
 
     return render(request, 'projetos/base.html', context=context)
-
-    # <script>
-    #     $('*[id*=Modal]').each(function () {
-    #         $(this.id).on('show.bs.modal', function (event) {
-    #             var button = $(event.relatedTarget) // Button that triggered the modal
-    #             {#var recipient = button.data('whatever') // Extract info from data-* attributes#}
-    #             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    #             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    #
-    #             console.log("TESTANDO")
-    #             console.log("TESTANDO")
-    #
-    #             var modal = $(this)
-    #             modal.find('.modal-title').text('New message to ' + recipient)
-    #             modal.find('.modal-body input').val(recipient)
-    #         })
-    #
-    #         console.log(this);
-    #         console.log(this.id);
-    #         console.log($(this))
-    #     });
-    #
-    # </script>
 
 
 # @login_required todo
@@ -88,6 +112,9 @@ def drag_list(request):
     # ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
 
     return HttpResponse()
+
+
+# @login_required todo
 
 
 # @login_required todo
@@ -140,54 +167,65 @@ def drag_task(request, project_id):
 # @login_required todo
 def create_task(request, lista_id):
     lista = ListaTarefas.objects.get(id=lista_id)
-    projeto = lista.projeto
 
-    print('OK CHAMOU A VIEW')
+    def fix_form(form):
+        form.instance.lista_id = lista.id
 
-    if request.method == 'POST':
-        form = CreateTaskForm(request.POST, initial={
-            'projeto': projeto
-        })
+    return create_modal(
+        request,
+        CreateTaskForm,
+        f'/create_task/{lista_id}',
+        'Create New Task',
+        'projetos',
+        form_initial={'projeto': lista.projeto},
+        func_fix_form=fix_form,
+        success_msg='Task create successfully',
+    )
 
-        form.instance.lista_id = lista_id
-        # form.instance.ordem = lista.tarefa_set.first().ordem
 
-        # Tarefa.objects.filter(
-        #     lista__numero__gte=lista.numero,
-        # ).update(ordem=F('ordem') + 1)
-
-        if form.is_valid():
-            form.save()
-
-            messages.success(request, 'Task create successfully')
-
-            return HttpResponseRedirect(reverse('projetos'))
-
-    form = CreateTaskForm(initial={
-        'projeto': projeto
-    })
-
-    print(request.build_absolute_uri())
-
-    context = {
-        'form': form,
-        'url': request.GET.get('url'),
-        'title': request.GET.get('title')
-    }
-
-    print('TENTANDO PELA 999 VEZ CHAMAR O FORM')
-
-    response = render(request, 'parciais/create_forms.html', context=context)
-
-    # todo finish
-    # $('#myModal').modal('show');
-
-    response['X-IC-Script'] = '$("#modal_base").modal("show");'
-    # response['X-IC-Trigger'] = ''
-    # https://intercoolerjs.org/reference.html
-    # response['X-IC-Script'] = f"$(#{params['target_id']}).modal('show')"
-
-    return response
+# def create_task(request, lista_id):
+#     lista = ListaTarefas.objects.get(id=lista_id)
+#     projeto = lista.projeto
+#
+#     if request.method == 'POST':
+#         form = CreateTaskForm(request.POST, initial={
+#             'projeto': projeto
+#         })
+#
+#         form.instance.lista_id is lista_id
+#         # form.instance.ordem = lista.tarefa_set.first().ordem
+#
+#         # Tarefa.objects.filter(
+#         #     lista__numero__gte=lista.numero,
+#         # ).update(ordem=F('ordem') + 1)
+#
+#         if form.is_valid():
+#             form.save()
+#
+#             messages.success(request, 'Task create successfully')
+#
+#             return HttpResponseRedirect(reverse('projetos'))
+#
+#     form = CreateTaskForm(initial={
+#         'projeto': projeto
+#     })
+#
+#     # todo check url
+#     # print(request.GET.get('url'))
+#     # print(type(request.build_absolute_uri()))
+#     # print(type(request.get_full_path()))
+#
+#     context = {
+#         'form': form,
+#         'url': f'/create_task/{lista_id}',
+#         'title': 'Create New Task'
+#     }
+#
+#     response = render(request, 'parciais/create_forms.html', context=context)
+#
+#     response['X-IC-Script'] = '$("#modal_base").modal("show");'
+#
+#     return response
 
 
 # @login_required todo
@@ -205,6 +243,7 @@ def create_type_task(request, project_id):
                 projeto_id=project_id
             )
 
+    # todo check url
     return HttpResponseRedirect(reverse('projetos'))
 
 
@@ -220,8 +259,8 @@ def create_priority_task(request, project_id):
                 projeto_id=project_id
             )
 
+    # todo check url
     return HttpResponseRedirect(reverse('projetos'))
-
 
 def edit_type(request, type_id):
     pass
@@ -237,7 +276,6 @@ def edit_priority(request, priority_id):
 
 def delete_priority(request, priority_id):
     return HttpResponse()
-
 
 def edit_list(request, lista_id):
     pass

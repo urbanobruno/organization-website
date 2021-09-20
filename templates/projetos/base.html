@@ -153,11 +153,7 @@
                                             ic-get-from="{% url 'create_task' lista.id %}"
                                             ic-target="#modal_base"
                                             ic-deps="ignore"
-                                            ic-include='{
-                                                "url":"{% url "create_task" lista.id %}",
-                                                "title":"Create New Task"}'
-
-                                    >CREATE TASK MODAL - {{ item.get_object }}
+                                    >CREATE TASK MODAL - {{ item }}
                                     </button>
                                     {#let myModal = new bootstrap.Modal(document.getElementById('myModal'), {});#}
                                     {#myModal.show();#}
