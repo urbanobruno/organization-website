@@ -54,7 +54,7 @@ class PrioridadeTarefaProjeto(models.Model):
 
 class ListaTarefas(models.Model):
     nome = models.CharField(max_length=55, verbose_name='Nome da Lista')
-    numero = models.IntegerField(default=1)
+    numero = models.IntegerField(default=1, editable=False)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
 
     class Meta:
@@ -74,7 +74,7 @@ class Tarefa(models.Model):
     tipo = models.ForeignKey(TipoTarefaProjeto, blank=True, null=True, on_delete=models.SET_NULL)
     prioridade = models.ForeignKey(PrioridadeTarefaProjeto, blank=True, null=True, on_delete=models.SET_NULL)
     data = models.DateField(blank=True, null=True, verbose_name='Data Final')
-    ordem = models.IntegerField(default=1)
+    ordem = models.IntegerField(default=1, editable=False)
 
     class Meta:
         verbose_name = 'Tarefa'

@@ -6,7 +6,6 @@ from projetos.models import Tarefa, TipoTarefaProjeto, PrioridadeTarefaProjeto, 
 
 
 class CreateTaskForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         project_id = kwargs['initial']['projeto'].id
@@ -31,3 +30,10 @@ class CreateTaskForm(forms.ModelForm):
             'projeto': HiddenInput
         }
 
+
+class EditPriorityForm(forms.ModelForm):
+    class Meta:
+        model = PrioridadeTarefaProjeto
+        fields = [
+            'descricao'
+        ]

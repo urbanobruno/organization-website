@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from projetos.forms import CreateTaskForm
+from projetos.forms import CreateTaskForm, EditPriorityForm
 from projetos.models import Projeto, PrioridadeTarefaProjeto, Tarefa, TipoTarefaProjeto, ListaTarefas
 
 
@@ -15,11 +15,11 @@ def create_modal(
         form,
         url,
         title,
-        refresh,
         obj_instance=None,
         form_initial=None,
         func_fix_form=None,
         success_msg=None,
+        refresh='content',
 ):
     options_form = {'instance': obj_instance}
     if form_initial:
@@ -176,106 +176,59 @@ def create_task(request, lista_id):
         CreateTaskForm,
         f'/create_task/{lista_id}',
         'Create New Task',
-        'projetos',
         form_initial={'projeto': lista.projeto},
         func_fix_form=fix_form,
         success_msg='Task create successfully',
     )
 
 
-# def create_task(request, lista_id):
-#     lista = ListaTarefas.objects.get(id=lista_id)
-#     projeto = lista.projeto
-#
-#     if request.method == 'POST':
-#         form = CreateTaskForm(request.POST, initial={
-#             'projeto': projeto
-#         })
-#
-#         form.instance.lista_id is lista_id
-#         # form.instance.ordem = lista.tarefa_set.first().ordem
-#
-#         # Tarefa.objects.filter(
-#         #     lista__numero__gte=lista.numero,
-#         # ).update(ordem=F('ordem') + 1)
-#
-#         if form.is_valid():
-#             form.save()
-#
-#             messages.success(request, 'Task create successfully')
-#
-#             return HttpResponseRedirect(reverse('projetos'))
-#
-#     form = CreateTaskForm(initial={
-#         'projeto': projeto
-#     })
-#
-#     # todo check url
-#     # print(request.GET.get('url'))
-#     # print(type(request.build_absolute_uri()))
-#     # print(type(request.get_full_path()))
-#
-#     context = {
-#         'form': form,
-#         'url': f'/create_task/{lista_id}',
-#         'title': 'Create New Task'
-#     }
-#
-#     response = render(request, 'parciais/create_forms.html', context=context)
-#
-#     response['X-IC-Script'] = '$("#modal_base").modal("show");'
-#
-#     return response
-
-
 # @login_required todo
-# @require_POST
-def create_type_task(request, project_id):
-    desc = request.POST.get('type', None)
-
-    print(desc)
-    print(request.method)
-
-    if request.method == "POST":
-        if desc:
-            TipoTarefaProjeto.objects.create(
-                descricao=desc,
-                projeto_id=project_id
-            )
-
-    # todo check url
-    return HttpResponseRedirect(reverse('projetos'))
-
-
-# @login_required todo
-# @require_POST
 def create_priority_task(request, project_id):
-    desc = request.POST.get('priority', None)
+    description = request.POST.get('priority', None)
+
+    response = HttpResponse()
 
     if request.method == "POST":
-        if desc:
+        if description:
             PrioridadeTarefaProjeto.objects.create(
-                descricao=desc,
+                descricao=description,
                 projeto_id=project_id
             )
 
-    # todo check url
-    return HttpResponseRedirect(reverse('projetos'))
+            messages.success(request, 'Priority Created Successively')
 
-def edit_type(request, type_id):
-    pass
+    # todo check content
+    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
 
+    return response
 
-def delete_type(request, type_id):
-    return HttpResponse()
-
-
+# @login_required #todo
 def edit_priority(request, priority_id):
-    pass
+    return create_modal(
+        request,
+        EditPriorityForm,
+        f'/edit_priority/{priority_id}',
+        'Edit Priority',
+        obj_instance=PrioridadeTarefaProjeto.objects.get(id=priority_id),
+        success_msg='Priority edited successfully',
+    )
 
 
+# @login_required # todo
+@require_POST
 def delete_priority(request, priority_id):
-    return HttpResponse()
+
+    PrioridadeTarefaProjeto.objects.get(id=priority_id).delete()
+
+    messages.success(request, 'Priority deleted successfully')
+
+    response = HttpResponse()
+
+    # todo check content
+    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
+
+    return response
+
 
 def edit_list(request, lista_id):
     pass

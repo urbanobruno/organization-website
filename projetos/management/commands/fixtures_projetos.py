@@ -7,7 +7,7 @@ from random import randint
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-
+        # Todo - change super user
         if not User.objects.all().exists():
             u = User.objects.create_superuser(
                 username='admin',
@@ -15,8 +15,8 @@ class Command(BaseCommand):
                 email='bruno.urbano.rocha@gmail.com',
             )
         else:
-            u = User.objects.all().first()
-        # User.objects.all().delete()
+            u = User.objects.get(username='admin')
+
         Projeto.objects.all().delete()
         ListaTarefas.objects.all().delete()
         TipoTarefaProjeto.objects.all().delete()
@@ -53,7 +53,6 @@ class Command(BaseCommand):
         ]
 
         lista = []
-        x = 1
         for p in list_prioridade:
             lista.append(
                 PrioridadeTarefaProjeto(
@@ -61,7 +60,6 @@ class Command(BaseCommand):
                     projeto_id=proj.id,
                 )
             )
-            x += 1
 
         PrioridadeTarefaProjeto.objects.bulk_create(lista)
 
@@ -72,7 +70,6 @@ class Command(BaseCommand):
         ]
 
         lista = []
-        x = 1
         for t in list_tipos:
             lista.append(
                 TipoTarefaProjeto(
@@ -80,12 +77,12 @@ class Command(BaseCommand):
                     projeto_id=proj.id,
                 )
             )
-            x += 1
 
         TipoTarefaProjeto.objects.bulk_create(lista)
 
         lista_criar = []
 
+        # todo check range
         for x in range(1, 5):
             lista_criar.append(Tarefa(
                 projeto_id=proj.id,
