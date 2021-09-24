@@ -1,0 +1,237 @@
+{% load static %}
+{% load crispy_forms_filters %}
+
+
+<div class="container p-0 m-0">
+    <div class="row w-100 h-100 mt-2">
+
+        <!-- Priority -->
+        <div class="col-12 col-md-3 pr-0">
+
+            <div class="container mb-4">
+                <div class="card-header">
+                    Priority
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for priority in item.prioritytask_set.all %}
+                            <li class="list-group-item rounded">
+                                {{ priority }}
+                                <div class="float-right">
+                                    <button class="btn btn-primary btn-sm"
+                                            ic-post-to="{% url 'edit_priority' priority.id %}"
+                                            ic-deps="ignore">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </button>
+
+                                    <button class="btn btn-danger btn-sm"
+                                       ic-post-to="{% url 'delete_priority' priority.id %}"
+                                       ic-deps="ignore">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        <li class="list-group-item rounded">
+
+                            <form action="{% url 'create_priority_task' item.id %}" id="form_create_priority"
+                                  method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="priority" class="w-100 text-center"><b>Create new
+                                        Priority</b></label>
+                                    <input type="text" placeholder="Priority" id="priority" name="priority"
+                                           class="form-control" required>
+                                </div>
+
+                                <div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check-circle"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" aria-label="Close"
+                                            id="close_priority">
+                                        <span aria-hidden="true"><i class="fas fa-times"></i> Close</span>
+                                    </button>
+                                </div>
+
+                            </form>
+
+                            <div class="text-center">
+                                <button id="show_priority" class="btn btn-success">
+                                    Create Priority
+                                </button>
+                            </div>
+                        </li>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ROW -->
+        <div class="col-12 col-md-9 overflow-auto d-flex">
+            {% for list in item.tasklist_set.all %}
+                <div class="rounded sort_lists mr-2 ml-2" id="{{ list.order }}">
+                    <div class="rounded border border-dark">
+                        <div class="card-header">
+                            {{ list.name }}
+                            <span class="badge bg-dark rounded-pill text-white ml-1">
+                                    {{ list.task_set.count }}
+                                </span>
+                            <button class="btn btn-info dropdown-toggle float-right" type="button"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                <i class="fas fa-tasks"></i>
+                            </button>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <button class="dropdown-item"
+                                        ic-get-from="{% url 'create_task' list.id %}"
+                                        ic-target="#modal_base"
+                                        ic-deps="ignore">
+                                    Create New Task
+                                </button>
+
+                                <button class="dropdown-item"
+                                        ic-post-to="{% url 'delete_all_task_list' list.id %}"
+                                        ic-confirm="Delete all Task from List {{ list.nome }}"
+                                        ic-deps="ignore">
+                                    Delete All Task
+                                </button>
+
+                                <button class="dropdown-item"
+                                        ic-get-from="{% url 'edit_list' list.id %}"
+                                        ic-target="#modal_base"
+                                        ic-deps="ignore">
+                                    Edit List
+                                </button>
+
+                                <button class="dropdown-item"
+                                        ic-post-to="{% url 'delete_list' list.id %}"
+                                        ic-confirm="Delete List {{ list.nome }}"
+                                        ic-deps="ignore">
+                                    Delete List
+                                </button>
+
+                            </div>
+
+                        </div>
+                        <!-- todo same id in list group and task group -->
+                        <div class="card-body">
+                            <ul class="list-group sort_tasks" id="{{ list.order }}">
+                                {% for task in list.task_set.all %}
+                                    <li class="list-group-item rounded mb-2" id="{{ task.id }}">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <div>
+                                                {{ task }}
+                                            </div>
+
+                                        </div>
+                                        <p class="mb-1 small">
+                                            <b>Priority:</b> {{ task.prioriy }}
+                                        </p>
+                                    </li>
+
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    var elements_lists = document.getElementsByClassName("sort_lists")
+
+    var i = 0, len_list = elements_lists.length;
+    while (i < len_list) {
+        Sortable.create(elements_lists[i], {
+            group: 'shared_list',
+            animation: 150,
+
+            onEnd: function (evt) {
+
+                console.log(evt.oldIndex);
+                console.log(evt.oldIndex + 1);
+                console.log("-------------");
+                console.log(evt.newIndex);
+                console.log(evt.newIndex + 1);
+
+                $.ajax({
+                    url: "/project/drag_list",
+                    data: {
+                        'list_id': evt.item.id,
+                        'index_after': evt.newIndex + 1,
+                    },
+                    success: function (response) {
+                        location.reload()
+                    },
+
+                });
+
+            }
+        });
+
+        i++
+    }
+
+    var elements_tasks = document.getElementsByClassName("sort_tasks")
+
+    var it = 0, len_task = elements_tasks.length;
+    while (it < len_task) {
+        Sortable.create(elements_tasks[it], {
+            group: 'shared_task',
+            animation: 150,
+
+            onEnd: function (evt) {
+
+                $.ajax({
+                    url: "/project/drag_task/{{ item.id }}",
+                    data: {
+                        'task_id': evt.item.id,
+                        'target': evt.to.id,
+                        'index_after': evt.newIndex,
+                    },
+                    success: function (response) {
+                        location.reload()
+                    },
+
+                });
+
+            }
+        });
+
+        it++
+    }
+
+</script>
+
+<!-- todo change function - hide on form -test toggle - see internet the best way to do it -->
+<script>
+
+    $(document).ready(function () {
+        $("#form_create_priority").hide();
+    });
+
+    $("#show_priority").click(function () {
+        $("#form_create_priority").show();
+        $("#show_priority").hide();
+    });
+
+    $("#close_priority").click(function () {
+        $("#form_create_priority").hide();
+        $("#show_priority").show();
+    });
+
+
+</script>
+
+

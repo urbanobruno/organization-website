@@ -35,7 +35,7 @@ SECRET_KEY = dados['SECRET_KEY']
 # Application definition
 
 INSTALLED_APPS = [
-    'projetos',
+    'projects',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,7 +74,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries': {
-                'tags_project': 'projetos.templatetags.tags_project',
+                'tags_project': 'projects.templatetags.tags_project',
             }
         },
     },

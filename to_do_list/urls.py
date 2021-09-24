@@ -18,10 +18,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# todo fix url
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('projeto/', include('projetos.urls')),
-    path('', include('projetos.urls')),
+    path('projeto/', include('projects.urls')),
+    path('', include('projects.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # urlpatterns += staticfiles_urlpatterns()

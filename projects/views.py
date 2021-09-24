@@ -6,8 +6,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from projetos.forms import CreateTaskForm, EditPriorityForm
-from projetos.models import Projeto, PrioridadeTarefaProjeto, Tarefa, TipoTarefaProjeto, ListaTarefas
+from projects.forms import CreateTaskForm, EditPriorityForm
+from projects.models import Project, PriorityTask, Task, TaskList
 
 
 def create_modal(
@@ -61,19 +61,10 @@ def create_modal(
     return response
 
 
-def base_projetos(request):
-    projeto = Projeto.objects.get(id=1)
+def view_project(request, project_id):
+    project = Project.objects.get(id=project_id)
 
-    # form = CreateTaskForm(initial={
-    #     'projeto': projeto
-    # })
-
-    context = {
-        'item': projeto,
-        # 'form_create_task': form
-    }
-
-    return render(request, 'projetos/base.html', context=context)
+    return render(request, 'projects/view_project.html', context={'item': project})
 
 
 # @login_required todo
@@ -86,7 +77,7 @@ def drag_list(request):
     print(target_list)
     print(index_after)
 
-    lista = ListaTarefas.objects.get(id=list_id)
+    list = TaskList.objects.get(id=list_id)
 
     # try:
     #     new_numero = Tarefa.objects.filter(
@@ -119,35 +110,35 @@ def drag_list(request):
 
 # @login_required todo
 def drag_task(request, project_id):
-    tarefa_id = int(request.GET.get('tarefa_id'))
-    target_list = int(request.GET.get('target'))
-    index_after = int(request.GET.get('index_after'))
-
-    # Todo: check with one task
-
-    try:
-        new_order = Tarefa.objects.filter(
-            projeto_id=project_id,
-            lista__numero__gte=target_list,
-        )[index_after].ordem
-    except IndexError:
-        new_order = Tarefa.objects.filter(
-            projeto_id=project_id,
-            lista__numero__lte=target_list,
-        ).last().ordem
-
-    Tarefa.objects.filter(
-        id=tarefa_id
-    ).update(
-        lista_id=ListaTarefas.objects.get(projeto_id=project_id, numero=target_list),
-        ordem=new_order
-    )
-
-    Tarefa.objects.filter(
-        projeto_id=project_id,
-        lista__isnull=False,
-        ordem__gte=new_order,
-    ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
+    # tarefa_id = int(request.GET.get('tarefa_id'))
+    # target_list = int(request.GET.get('target'))
+    # index_after = int(request.GET.get('index_after'))
+    # 
+    # # Todo: check with one task
+    # 
+    # try:
+    #     new_order = Task.objects.filter(
+    #         projeto_id=project_id,
+    #         list__numero__gte=target_list,
+    #     )[index_after].ordem
+    # except IndexError:
+    #     new_order = Task.objects.filter(
+    #         projeto_id=project_id,
+    #         list__numero__lte=target_list,
+    #     ).last().ordem
+    # 
+    # Task.objects.filter(
+    #     id=tarefa_id
+    # ).update(
+    #     list_id=Task.objects.get(project_id=project_id, numero=target_list),
+    #     ordem=new_order
+    # )
+    # 
+    # Task.objects.filter(
+    #     project_id=project_id,
+    #     list__isnull=False,
+    #     ordem__gte=new_order,
+    # ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
 
     return HttpResponse()
 
@@ -165,22 +156,61 @@ def drag_task(request, project_id):
 #     return render(request, 'contacts/contact_page.html', context)
 
 # @login_required todo
-def create_task(request, lista_id):
-    lista = ListaTarefas.objects.get(id=lista_id)
+def create_task(request, list_id):
+    tlist = TaskList.objects.get(id=list_id)
 
     def fix_form(form):
-        form.instance.lista_id = lista.id
+        form.instance.list_id = tlist.id
 
     return create_modal(
         request,
         CreateTaskForm,
-        f'/create_task/{lista_id}',
+        f'/create_task/{list_id}',
         'Create New Task',
-        form_initial={'projeto': lista.projeto},
+        form_initial={'project': tlist.project},
         func_fix_form=fix_form,
         success_msg='Task create successfully',
     )
 
+@require_POST
+def delete_task(request, task_id):
+    Task.objects.get(id=task_id).delete()
+
+    messages.success(request, 'Task deleted successfully')
+
+    response = HttpResponse()
+
+    # todo check content
+    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
+
+    return response
+
+
+@require_POST
+def delete_all_task_list(request, list_id):
+    Task.objects.filter(
+        list_id=list_id,
+    ).delete()
+
+    messages.success(request, 'Task deleted successfully')
+
+    response = HttpResponse()
+
+    # todo check content
+    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
+
+    return response
+
+
+def edit_list(request, priority_id):
+    return create_modal(
+        request,
+        EditPriorityForm,
+        f'/edit_priority/{priority_id}',
+        'Edit Priority',
+        obj_instance=PriorityTask.objects.get(id=priority_id),
+        success_msg='Priority edited successfully',
+    )
 
 # @login_required todo
 def create_priority_task(request, project_id):
@@ -190,9 +220,9 @@ def create_priority_task(request, project_id):
 
     if request.method == "POST":
         if description:
-            PrioridadeTarefaProjeto.objects.create(
+            PriorityTask.objects.create(
                 descricao=description,
-                projeto_id=project_id
+                project_id=project_id
             )
 
             messages.success(request, 'Priority Created Successively')
@@ -209,7 +239,7 @@ def edit_priority(request, priority_id):
         EditPriorityForm,
         f'/edit_priority/{priority_id}',
         'Edit Priority',
-        obj_instance=PrioridadeTarefaProjeto.objects.get(id=priority_id),
+        obj_instance=PriorityTask.objects.get(id=priority_id),
         success_msg='Priority edited successfully',
     )
 
@@ -218,7 +248,7 @@ def edit_priority(request, priority_id):
 @require_POST
 def delete_priority(request, priority_id):
 
-    PrioridadeTarefaProjeto.objects.get(id=priority_id).delete()
+    PriorityTask.objects.get(id=priority_id).delete()
 
     messages.success(request, 'Priority deleted successfully')
 
@@ -230,9 +260,9 @@ def delete_priority(request, priority_id):
     return response
 
 
-def edit_list(request, lista_id):
+def edit_list(request, list_id):
     pass
 
 
-def delete_list(request, lista_id):
+def delete_list(request, list_id):
     return HttpResponse()

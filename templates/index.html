@@ -7,9 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Todo: name website -->
     <title>
-        {% block title %}
-            To do list
-        {% endblock %}
+        {% if item %}
+            {{ item }} -
+        {% endif %}
+        To do List
     </title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -19,19 +20,21 @@
 <body>
 
     <!-- Barra Superior -->
-    {% include 'barra_superior.html' %}
+    {% include 'navbar.html' %}
 
     <!-- Page Content -->
-    {% block content %}
+    <main id="page_content">
+        {% block content %}
 
-    {% endblock %}
+        {% endblock %}
 
-    <!-- todo -->
-    <!-- Intercooler Modal Creation -->
-    <div class="modal fade" id="modal_base" tabindex="-1" role="dialog" aria-labelledby="form_label"
-         aria-hidden="true">
+        <!-- Intercooler Modal Creation -->
+        <div class="modal fade" id="modal_base" tabindex="-1" role="dialog" aria-labelledby="form_label"
+             aria-hidden="true">
 
-    </div>
+        </div>
+
+    </main>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -53,11 +56,12 @@
     <!-- Intercooler -->
     <script src="https://cdn.jsdelivr.net/npm/intercooler"></script>
 
-{#    <script>#}
-{#        $("#close_modal").onclick( function () {#}
-{#            $("#modal_base").modal("hide")#}
-{#        })#}
-{#    </script>#}
+    <script>
+        $("#close_modal").click(function () {
+            $("#modal_base").modal("hide");
+            {# $("#modal_base").hide(); #}
+        })
+    </script>
 
 </body>
 </html>
