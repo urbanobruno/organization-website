@@ -55,7 +55,7 @@ class Command(BaseCommand):
         for p in list_priority:
             list.append(
                 PriorityTask(
-                    description=p,
+                    name=p,
                     project_id=proj.id,
                 )
             )

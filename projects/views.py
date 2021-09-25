@@ -61,6 +61,16 @@ def create_modal(
     return response
 
 
+def projects(request):
+
+    # projects = Project.objects.filter(
+    #     user_id=request.user.id
+    # )
+
+    project = Project.objects.all()
+
+    return render(request, 'projects/projects_base.html', context={'projects': project})
+
 def view_project(request, project_id):
     project = Project.objects.get(id=project_id)
 
@@ -214,14 +224,14 @@ def edit_list(request, priority_id):
 
 # @login_required todo
 def create_priority_task(request, project_id):
-    description = request.POST.get('priority', None)
+    name = request.POST.get('priority', None)
 
     response = HttpResponse()
 
     if request.method == "POST":
-        if description:
+        if name:
             PriorityTask.objects.create(
-                descricao=description,
+                name=name,
                 project_id=project_id
             )
 

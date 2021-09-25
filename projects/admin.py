@@ -15,9 +15,9 @@ class TaskListAdmin(admin.ModelAdmin):
 
 
 class PriorityTaskAdmin(admin.ModelAdmin):
-    list_display = ('id', 'description', 'project')
+    list_display = ('id', 'name', 'project')
     list_display_links = ('id', )
-    list_editable = ('description',)
+    list_editable = ('name',)
 
 
 class TaskAdmin(admin.ModelAdmin):

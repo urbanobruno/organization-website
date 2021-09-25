@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 
-
+# todo ver como fica os templates com a descrição no 255
 class Project(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateField(default=timezone.now, editable=False)
 
     class Meta:
         verbose_name = 'Project'
@@ -15,18 +18,17 @@ class Project(models.Model):
         return self.name
 
 
+# todo deixar criado ja high(red), medium(yellow), low(green) - check
 class PriorityTask(models.Model):
-    # Exemplo: alta, média, baixa
-    # Ja deixar criado
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    description = models.CharField(max_length=55)
+    name = models.CharField(max_length=55)
 
     class Meta:
         verbose_name = 'Priority'
         verbose_name_plural = 'Priorities'
 
     def __str__(self):
-        return self.description
+        return self.name
 
 
 class TaskList(models.Model):

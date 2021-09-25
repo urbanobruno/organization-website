@@ -31,7 +31,7 @@ class EditPriorityForm(forms.ModelForm):
     class Meta:
         model = PriorityTask
         fields = [
-            'description'
+            'name'
         ]
 
 
