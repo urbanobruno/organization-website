@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.forms import modelform_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from projects.forms import CreateTaskForm, EditPriorityForm
+from projects.forms import CreateTaskForm
 from projects.models import Project, PriorityTask, Task, TaskList
 
 
@@ -35,12 +36,12 @@ def create_modal(
             s = f.save()
 
             if success_msg:
-                messages.success(request, success_msg)
+                messages.success(request, f'{success_msg}')
 
             response = HttpResponse()
 
             # todo define ids - make id content of whole page - content
-            # response['X-IC-Script'] = f'Intercooler.refresh($("#{refresh}"));'
+            response['X-IC-Script'] = f'Intercooler.refresh($("#{refresh}"));'
 
             return response
 
@@ -60,6 +61,11 @@ def create_modal(
 
     return response
 
+
+def home(request):
+
+    # todo return redirect do template
+    return HttpResponse()
 
 def projects(request):
 
@@ -165,6 +171,55 @@ def drag_task(request, project_id):
 #     context = {'form': form}
 #     return render(request, 'contacts/contact_page.html', context)
 
+def create_project(request):
+
+    def fix_form(form):
+        form.instance.user_id = request.user.id
+
+    return create_modal(
+        request,
+        modelform_factory(Project, fields=['name', 'description']),
+        f'/create_project',
+        'Create Project',
+        func_fix_form=fix_form,
+        success_msg='Project {s.name} created successfully',
+    )
+
+
+def edit_project(request, project_id):
+    return create_modal(
+        request,
+        modelform_factory(Project, fields=['name', 'description']),
+        f'/edit_project/{project_id}',
+        'Edit Project',
+        obj_instance=Project.objects.get(id=project_id),
+        success_msg='Project {s.name} edited successfully',
+    )
+
+
+@require_POST
+def delete_project(request, project_id):
+    # Task.objects.filter(
+    #     project_id=project_id
+    # ).delete()
+    #
+    # TaskList.objects.filter(
+    #     project_id=project_id
+    # ).delete()
+    # todo testar sem pra ver se faz cascade ou se precisa fazer assim
+
+    Project.objects.get(id=project_id).delete()
+
+    messages.success(request, 'Project deleted successfully')
+
+    response = HttpResponse()
+
+    # todo check content
+    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
+
+    return response
+
+
 # @login_required todo
 def create_task(request, list_id):
     tlist = TaskList.objects.get(id=list_id)
@@ -179,8 +234,9 @@ def create_task(request, list_id):
         'Create New Task',
         form_initial={'project': tlist.project},
         func_fix_form=fix_form,
-        success_msg='Task create successfully',
+        success_msg='Task {s.title} create successfully',
     )
+
 
 @require_POST
 def delete_task(request, task_id):
@@ -212,14 +268,14 @@ def delete_all_task_list(request, list_id):
     return response
 
 
-def edit_list(request, priority_id):
+def edit_list(request, list_id):
     return create_modal(
         request,
-        EditPriorityForm,
-        f'/edit_priority/{priority_id}',
-        'Edit Priority',
-        obj_instance=PriorityTask.objects.get(id=priority_id),
-        success_msg='Priority edited successfully',
+        modelform_factory(TaskList, fields=['name']),
+        f'/edit_list/{list_id}',
+        'Edit List',
+        obj_instance=TaskList.objects.get(id=list_id),
+        success_msg='List edited successfully',
     )
 
 # @login_required todo
@@ -246,7 +302,7 @@ def create_priority_task(request, project_id):
 def edit_priority(request, priority_id):
     return create_modal(
         request,
-        EditPriorityForm,
+        modelform_factory(PriorityTask, fields=['name']),
         f'/edit_priority/{priority_id}',
         'Edit Priority',
         obj_instance=PriorityTask.objects.get(id=priority_id),
@@ -257,7 +313,6 @@ def edit_priority(request, priority_id):
 # @login_required # todo
 @require_POST
 def delete_priority(request, priority_id):
-
     PriorityTask.objects.get(id=priority_id).delete()
 
     messages.success(request, 'Priority deleted successfully')
@@ -270,9 +325,19 @@ def delete_priority(request, priority_id):
     return response
 
 
-def edit_list(request, list_id):
-    pass
-
-
 def delete_list(request, list_id):
-    return HttpResponse()
+    # Task.objects.filter(
+    #     list_id=list_id
+    # ).delete()
+    # todo testar sem pra ver se faz cascade ou se precisa fazer assim
+
+    TaskList.objects.get(id=list_id).delete()
+
+    messages.success(request, 'Task List deleted successfully')
+
+    response = HttpResponse()
+
+    # todo check content
+    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
+
+    return response

@@ -37,7 +37,20 @@
                                     {{ project.description|default:"" }}
                                 </div>
                                 <div class="col-12 col-md-2 float-right">
-                                    FUNCOES
+
+                                    <button class="btn btn-primary btn-sm"
+                                            ic-get-from="{% url 'edit_project' project.id %}"
+                                            ic-target="#modal_base"
+                                            ic-deps="ignore">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </button>
+
+                                    <button class="btn btn-danger btn-sm"
+                                            ic-post-to="{% url 'delete_project' project.id %}"
+                                            ic-confirm="Delete Project {{ project.name }}?"
+                                            ic-deps="ignore">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </button>
                                 </div>
 
                                 <p>XX {{ project.created_at }}</p>

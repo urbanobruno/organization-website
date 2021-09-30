@@ -26,18 +26,3 @@ class CreateTaskForm(forms.ModelForm):
             'project': HiddenInput
         }
 
-
-class EditPriorityForm(forms.ModelForm):
-    class Meta:
-        model = PriorityTask
-        fields = [
-            'name'
-        ]
-
-
-class EditListForm(forms.ModelForm):
-    class Meta:
-        model = TaskList
-        fields = [
-            'name'
-        ]

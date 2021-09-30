@@ -96,7 +96,7 @@
 
                                 <button class="dropdown-item"
                                         ic-post-to="{% url 'delete_all_task_list' list.id %}"
-                                        ic-confirm="Delete all Task from List {{ list.nome }}"
+                                        ic-confirm="Delete all Task from List {{ list.nome }}?"
                                         ic-deps="ignore">
                                     Delete All Task
                                 </button>
@@ -110,7 +110,7 @@
 
                                 <button class="dropdown-item"
                                         ic-post-to="{% url 'delete_list' list.id %}"
-                                        ic-confirm="Delete List {{ list.nome }}"
+                                        ic-confirm="Delete List {{ list.nome }}?"
                                         ic-deps="ignore">
                                     Delete List
                                 </button>

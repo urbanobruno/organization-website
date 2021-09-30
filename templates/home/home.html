@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+{% load static %}
+
+<!-- todo fix static -->
+{% block head %}
+    <link href="../static/home_styles.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    <header class="bg-dark py-5">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <div class="text-center my-5">
+                        <h1 class="display-5 fw-bolder text-white mb-2">Present your business in a whole new way</h1>
+                        <p class="lead text-white-50 mb-4">Organize your tasks, present them in a calendar, etc!</p>
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                            <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#">Get Started</a>
+                            <a class="btn btn-outline-light btn-lg px-4" href="#features">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features section-->
+    <!-- todo call to action links -->
+    <section class="py-5 border-bottom" id="features">
+        <div class="container px-5 my-5">
+            <div class="row gx-5">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
+                        <i class="bi bi-collection"></i>
+                    </div>
+                    <h2 class="h4 fw-bolder">Calendar</h2>
+                    <p>Organize and visualize your tasks in a calendar etc etc.</p>
+                    <a class="text-decoration-none" href="#">
+                        Call to action
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i>
+                    </div>
+                    <h2 class="h4 fw-bolder">Projects</h2>
+                    <p>Create Projects to organize your tasks etc etc.</p>
+                    <a class="text-decoration-none" href="#">
+                        Call to action
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-4">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i>
+                    </div>
+                    <h2 class="h4 fw-bolder">Notes</h2>
+                    <p>Write Notes Plans etc etc.</p>
+                    <a class="text-decoration-none" href="#">
+                        Call to action
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact section-->
+    <section class="bg-light py-5">
+        <div class="container px-5 my-5 px-5">
+            <div class="text-center mb-5">
+                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
+                    <i class="bi bi-envelope"></i>
+                </div>
+                <h2 class="fw-bolder">Get in touch</h2>
+                <p class="lead mb-0">We'd love to hear from you</p>
+            </div>
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <!-- * * * * * * * * * * * * * * *-->
+                    <!-- * * SB Forms Contact Form * *-->
+                    <!-- * * * * * * * * * * * * * * *-->
+                    <!-- This form is pre-integrated with SB Forms.-->
+                    <!-- To make this form functional, sign up at-->
+                    <!-- https://startbootstrap.com/solution/contact-forms-->
+                    <!-- to get an API token!-->
+                    <form id="contactForm" method="POST" action="{% url 'projects' %}">
+                        <!-- Name input-->
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="name" type="text" placeholder="Your Name" required/>
+                            <label for="name">Name</label>
+                        </div>
+                        <!-- Email address input-->
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="email" type="email"
+                                   placeholder="name@example.com" required/>
+                            <label for="email">Email address</label>
+                        </div>
+                        <!-- Message input-->
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="message" type="text"
+                                      placeholder="Your Message" style="height: 10rem" required></textarea>
+                            <label for="message">Message</label>
+                        </div>
+                        <!-- Submit Button-->
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" id="submitButton"
+                                    type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container px-5">
+            <p class="m-0 text-center text-white">Made by Bruno Urbano</p>
+            <p class="m-0 text-center text-white">
+                Github: <a href="https://github.com/urbanobruno">https://github.com/urbanobruno</a>
+            </p>
+        </div>
+    </footer>
+
+
+{% endblock %}
