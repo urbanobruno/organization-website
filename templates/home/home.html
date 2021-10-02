@@ -1,11 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
 
-<!-- todo fix static -->
-{% block head %}
-    <link href="../static/home_styles.css" rel="stylesheet">
-{% endblock %}
-
 {% block content %}
 
     <header class="bg-dark py-5">
@@ -16,7 +11,8 @@
                         <h1 class="display-5 fw-bolder text-white mb-2">Present your business in a whole new way</h1>
                         <p class="lead text-white-50 mb-4">Organize your tasks, present them in a calendar, etc!</p>
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                            <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#">Get Started</a>
+                            <button class="btn btn-primary btn-lg px-4 me-sm-3" type="button" data-toggle="modal"
+                            data-target="#login_register_form">Get Started</button>
                             <a class="btn btn-outline-light btn-lg px-4" href="#features">Learn More</a>
                         </div>
                     </div>
@@ -77,13 +73,6 @@
             </div>
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-6">
-                    <!-- * * * * * * * * * * * * * * *-->
-                    <!-- * * SB Forms Contact Form * *-->
-                    <!-- * * * * * * * * * * * * * * *-->
-                    <!-- This form is pre-integrated with SB Forms.-->
-                    <!-- To make this form functional, sign up at-->
-                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                    <!-- to get an API token!-->
                     <form id="contactForm" method="POST" action="{% url 'projects' %}">
                         <!-- Name input-->
                         <div class="form-floating mb-3">
@@ -125,5 +114,8 @@
         </div>
     </footer>
 
+{#    {% include 'extra/login_register_form.html' %}#}
+
+    <!-- todo quando ciclado na navbar os scripts vao 2 vezes -->
 
 {% endblock %}

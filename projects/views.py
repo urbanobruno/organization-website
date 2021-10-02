@@ -54,7 +54,7 @@ def create_modal(
         'title': title
     }
 
-    response = render(request, 'parciais/create_forms.html', context=context)
+    response = render(request, 'extra/create_forms.html', context=context)
 
     # todo check toggle
     response['X-IC-Script'] = '$("#modal_base").modal("show");'
@@ -64,8 +64,7 @@ def create_modal(
 
 def home(request):
 
-    # todo return redirect do template
-    return HttpResponse()
+    return render(request, 'home/home.html')
 
 def projects(request):
 
