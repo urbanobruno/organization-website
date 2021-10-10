@@ -36,6 +36,7 @@ SECRET_KEY = dados['SECRET_KEY']
 
 INSTALLED_APPS = [
     'projects',
+    'schedule',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
