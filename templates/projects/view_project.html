@@ -1,6 +1,10 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
+<form id="defaults">
+    <input name="csrfmiddlewaretoken" type="hidden" value="{{ csrf_token }}">
+</form>
+
 <div class="container p-0 m-0">
     <div class="row w-100 h-100 mt-2">
 
@@ -18,13 +22,15 @@
                                 {{ priority.name }}
                                 <div class="float-right">
                                     <button class="btn btn-primary btn-sm"
-                                            ic-post-to="{% url 'edit_priority' priority.id %}"
+                                            ic-get-from="{% url 'edit_priority' priority.id %}"
+                                            ic-target="#modal_base"
                                             ic-deps="ignore">
                                         <i class="fa fa-pencil-alt"></i>
                                     </button>
 
                                     <button class="btn btn-danger btn-sm"
                                             ic-post-to="{% url 'delete_priority' priority.id %}"
+                                            ic-include="#defaults"
                                             ic-deps="ignore">
                                         <i class="fa fa-times"></i>
                                     </button>

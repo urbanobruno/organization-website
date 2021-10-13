@@ -11,6 +11,9 @@ from projects.forms import CreateTaskForm
 from projects.models import Project, PriorityTask, Task, TaskList
 
 
+def home(request):
+    return render(request, 'home/home.html')
+
 def create_modal(
         request,
         form,
@@ -62,10 +65,8 @@ def create_modal(
     return response
 
 
-def home(request):
-
-    return render(request, 'home/home.html')
-
+# todo
+# @login_required
 def projects(request):
 
     # projects = Project.objects.filter(
@@ -76,6 +77,8 @@ def projects(request):
 
     return render(request, 'projects/projects_base.html', context={'projects': project})
 
+# todo
+# @login_required
 def view_project(request, project_id):
     project = Project.objects.get(id=project_id)
 
@@ -118,9 +121,6 @@ def drag_list(request):
     # ).exclude(id=tarefa_id).update(ordem=F('ordem') + 1)
 
     return HttpResponse()
-
-
-# @login_required todo
 
 
 # @login_required todo
@@ -170,6 +170,8 @@ def drag_task(request, project_id):
 #     context = {'form': form}
 #     return render(request, 'contacts/contact_page.html', context)
 
+# todo
+# @login_required
 def create_project(request):
 
     def fix_form(form):
@@ -184,7 +186,8 @@ def create_project(request):
         success_msg='Project {s.name} created successfully',
     )
 
-
+# todo
+# @login_required
 def edit_project(request, project_id):
     return create_modal(
         request,
@@ -195,7 +198,8 @@ def edit_project(request, project_id):
         success_msg='Project {s.name} edited successfully',
     )
 
-
+# todo
+# @login_required
 @require_POST
 def delete_project(request, project_id):
     # Task.objects.filter(
@@ -236,7 +240,8 @@ def create_task(request, list_id):
         success_msg='Task {s.title} create successfully',
     )
 
-
+# todo
+# @login_required
 @require_POST
 def delete_task(request, task_id):
     Task.objects.get(id=task_id).delete()
@@ -250,7 +255,8 @@ def delete_task(request, task_id):
 
     return response
 
-
+# todo
+# @login_required
 @require_POST
 def delete_all_task_list(request, list_id):
     Task.objects.filter(
@@ -266,7 +272,8 @@ def delete_all_task_list(request, list_id):
 
     return response
 
-
+# todo
+# @login_required
 def edit_list(request, list_id):
     return create_modal(
         request,
@@ -276,6 +283,7 @@ def edit_list(request, list_id):
         obj_instance=TaskList.objects.get(id=list_id),
         success_msg='List edited successfully',
     )
+
 
 # @login_required todo
 def create_priority_task(request, project_id):
@@ -312,18 +320,20 @@ def edit_priority(request, priority_id):
 # @login_required # todo
 @require_POST
 def delete_priority(request, priority_id):
+    print('ENTROU NA VIEW')
     PriorityTask.objects.get(id=priority_id).delete()
 
     messages.success(request, 'Priority deleted successfully')
 
     response = HttpResponse()
 
-    # todo check content
+    # todo nao ta dando refresh
     response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
 
     return response
 
-
+# todo
+# @login_required
 def delete_list(request, list_id):
     # Task.objects.filter(
     #     list_id=list_id

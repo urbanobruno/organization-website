@@ -12,20 +12,26 @@ class Calendar(HTMLCalendar):
     # formats a day as a td
     # filter events by day
     def formatday(self, day, events):
-        events_per_day = events.filter(day__day=day)
-        d = ''
-        for event in events_per_day:
-            d += f'<li> {event.title} </li>'
+        events_filter_day = events.filter(day__day=day)
+        # list_events_day = ''.join([f'<li> {e.title} <li>' for e in events_filter_day])
+        # todo
+        list_events_day = ''
 
+        for event in events_filter_day:
+            list_events_day += f'<li> {event.title} </li>'
+
+
+        # todo implementar id e colocar funcao intercooler que chama view
         if day != 0:
-            return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
+            return f"<td><span class='date'>{day}</span><ul> {list_events_day} </ul></td>"
         return '<td></td>'
 
     # formats a week as a tr
     def formatweek(self, theweek, events):
+        print(theweek)
         week = ''
-        for d, weekday in theweek:
-            week += self.formatday(d, events)
+        for day, weekday in theweek:
+            week += self.formatday(day, events)
         return f'<tr> {week} </tr>'
 
     # formats a month as a table

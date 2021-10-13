@@ -1,7 +1,8 @@
-<!-- todo fix static -->
-<link rel="stylesheet" href="../static/calendar_styles.css">
+{% load static %}
 
+<link rel="stylesheet" href="{% static 'css/calendar_styles.css' %}">
 
+<!-- todo fix url -->
 <div class="clearfix">
 	<a class="btn btn-info float-left" href="{% url 'calendar' %}{{ prev_month }}"> Previous Month </a>
 	<a class="btn btn-info float-right" href="{% url 'calendar' %}{{ next_month }}"> Next Month </a>
