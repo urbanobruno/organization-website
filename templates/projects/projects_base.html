@@ -39,7 +39,8 @@
                                     <button class="btn btn-primary btn-sm"
                                             ic-get-from="{% url 'edit_project' project.id %}"
                                             ic-target="#modal_base"
-                                            ic-deps="ignore">
+                                            ic-deps="ignore"
+                                            ic-include="{'url': {% url 'edit_project' project.id %}">
                                         <i class="fa fa-pencil-alt"></i>
                                     </button>
 

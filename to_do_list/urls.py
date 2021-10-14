@@ -22,10 +22,10 @@ from projects.views import home
 # todo fix url
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', include('home.urls')),
     path('project/', include('projects.urls')),
     path('calendar/', include('schedule.urls')),
-    path('', include('home.urls'))
+    path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # urlpatterns += staticfiles_urlpatterns()

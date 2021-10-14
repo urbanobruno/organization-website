@@ -31,14 +31,14 @@
                         Projects
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link"
-                       ic-src="{% url 'projects' %}"
-                       ic-target="#content"
-                       ic-deps="ignore">
-                        Notes
-                    </a>
-                </li>
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link"#}
+                {#                       ic-src="{% url 'projects' %}"#}
+                {#                       ic-target="#content"#}
+                {#                       ic-deps="ignore">#}
+                {#                        Notes#}
+                {#                    </a>#}
+                {#                </li>#}
                 <li class="nav-item dropdown float-end">
 
                     <button class="btn btn-outline-black dropdown-toggle" id="NavDropdown" data-toggle="dropdown"
@@ -46,24 +46,27 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
+                    <!-- todo dropdown links -->
                     <div class="dropdown-menu dropdown-menu-right bg-dark text-center" aria-labelledby="NavDropdown">
-                        <a class="dropdown-item text-light text-center" href="#">PROFILE</a>
-                        <a class="dropdown-item text-light" href="#">SETTINGS</a>
+                        <a class="dropdown-item text-light text-center" href="#">Profile</a>
+                        <a class="dropdown-item text-light" href="#">Settings</a>
                         {% if user.is_authenticated %}
-                            <a class="dropdown-item text-light" href="#">LOGOUT</a>
+                            <a class="dropdown-item text-light" href="#">Logout</a>
                         {% else %}
-                            <a class="dropdown-item text-light"
-                               ic-get-from="{% url 'login_user' %}"
-                               ic-target="#modal_base"
-                               ic-deps="ignore">
-                                Login
-                            </a>
-                            <a class="dropdown-item text-light"
-                               ic-get-from="{% url 'register_user' %}"
-                               ic-target="#modal_base"
-                               ic-deps="ignore">
+                            <button class="dropdown-item text-light"
+                                    ic-get-from="{% url 'register_user' %}"
+                                    ic-target="#modal_base"
+                                    ic-deps="ignore"
+                                    ic-include="{'url': {% url 'register_user' %}">
                                 Register
-                            </a>
+                            </button>
+                            <button class="dropdown-item text-light"
+                                    ic-get-from="{% url 'login_user' %}"
+                                    ic-target="#modal_base"
+                                    ic-deps="ignore"
+                                    ic-include="{'url': {% url 'login_user' %}">
+                                Login
+                            </button>
                         {% endif %}
                     </div>
                 </li>
@@ -71,3 +74,12 @@
         </div>
     </div>
 </nav>
+
+{% if not user.is_authenticated %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/login_register_form_styles.css' %}">
+
+    {% include 'extra/login_form.html' %}
+    {% include 'extra/register_form.html' %}
+{% endif %}

@@ -1,21 +1,23 @@
 {% load crispy_forms_filters %}
-<!-- cade classe modal -->
-<form role="form" method="post" action="{{ url }}">
-    {% csrf_token %}
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="form_label">{{ title }}</h5>
-                <button type="button" class="close" id="close_modal" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+
+<!-- General Modal -->
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modal_form_label">{{ title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form method="post" action="{{ url }}">
+            {% csrf_token %}
             <div class="modal-body">
                 {{ form|crispy|safe }}
             </div>
             <div class="modal-footer"> <!-- Save -->
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">{{ submit_button|default:"Save" }}</button>
             </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>
+

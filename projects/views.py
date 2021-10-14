@@ -14,6 +14,18 @@ from projects.models import Project, PriorityTask, Task, TaskList
 def home(request):
     return render(request, 'home/home.html')
 
+def projects(request):
+
+    # projects = Project.objects.filter(
+    #     user_id=request.user.id
+    # )
+
+    project = Project.objects.all()
+
+    return render(request, 'projects/projects_base.html', context={'projects': project})
+
+
+# todo
 def create_modal(
         request,
         form,
@@ -22,6 +34,7 @@ def create_modal(
         obj_instance=None,
         form_initial=None,
         func_fix_form=None,
+        func_after_form=None,
         success_msg=None,
         refresh='content',
 ):
@@ -35,8 +48,12 @@ def create_modal(
         if func_fix_form:
             func_fix_form(form=f)
 
+        # todo if form not valid resend the form with errors
         if f.is_valid():
             s = f.save()
+
+            if func_after_form:
+                func_after_form(s)
 
             if success_msg:
                 messages.success(request, f'{success_msg}')
@@ -47,14 +64,15 @@ def create_modal(
             response['X-IC-Script'] = f'Intercooler.refresh($("#{refresh}"));'
 
             return response
-
+    else:
+        f = form(**options_form)
     # todo check if error think has to be post again
-    f = form(**options_form)
 
     context = {
         'form': f,
         'url': url,
-        'title': title
+        'title': title,
+        'submit_button': 'Save,'
     }
 
     response = render(request, 'extra/create_forms.html', context=context)
@@ -64,18 +82,6 @@ def create_modal(
 
     return response
 
-
-# todo
-# @login_required
-def projects(request):
-
-    # projects = Project.objects.filter(
-    #     user_id=request.user.id
-    # )
-
-    project = Project.objects.all()
-
-    return render(request, 'projects/projects_base.html', context={'projects': project})
 
 # todo
 # @login_required
@@ -180,7 +186,7 @@ def create_project(request):
     return create_modal(
         request,
         modelform_factory(Project, fields=['name', 'description']),
-        f'/create_project',
+        request.GET.get('url'),
         'Create Project',
         func_fix_form=fix_form,
         success_msg='Project {s.name} created successfully',
@@ -192,7 +198,7 @@ def edit_project(request, project_id):
     return create_modal(
         request,
         modelform_factory(Project, fields=['name', 'description']),
-        f'/edit_project/{project_id}',
+        request.GET.get('url'),
         'Edit Project',
         obj_instance=Project.objects.get(id=project_id),
         success_msg='Project {s.name} edited successfully',
@@ -233,7 +239,7 @@ def create_task(request, list_id):
     return create_modal(
         request,
         CreateTaskForm,
-        f'/create_task/{list_id}',
+        request.GET.get('url'),
         'Create New Task',
         form_initial={'project': tlist.project},
         func_fix_form=fix_form,
@@ -278,7 +284,7 @@ def edit_list(request, list_id):
     return create_modal(
         request,
         modelform_factory(TaskList, fields=['name']),
-        f'/edit_list/{list_id}',
+        request.GET.get('url'),
         'Edit List',
         obj_instance=TaskList.objects.get(id=list_id),
         success_msg='List edited successfully',
@@ -310,7 +316,7 @@ def edit_priority(request, priority_id):
     return create_modal(
         request,
         modelform_factory(PriorityTask, fields=['name']),
-        f'/edit_priority/{priority_id}',
+        request.GET.get('url'),
         'Edit Priority',
         obj_instance=PriorityTask.objects.get(id=priority_id),
         success_msg='Priority edited successfully',

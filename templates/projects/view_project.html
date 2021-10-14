@@ -24,7 +24,8 @@
                                     <button class="btn btn-primary btn-sm"
                                             ic-get-from="{% url 'edit_priority' priority.id %}"
                                             ic-target="#modal_base"
-                                            ic-deps="ignore">
+                                            ic-deps="ignore"
+                                            ic-include="{'url': {% url 'edit_priority' priority.id %}">
                                         <i class="fa fa-pencil-alt"></i>
                                     </button>
 
@@ -95,7 +96,8 @@
                                 <button class="dropdown-item"
                                         ic-get-from="{% url 'create_task' list.id %}"
                                         ic-target="#modal_base"
-                                        ic-deps="ignore">
+                                        ic-deps="ignore"
+                                        ic-include="{'url': {% url 'create_task' list.id %}">
                                     Create New Task
                                 </button>
 
@@ -109,7 +111,8 @@
                                 <button class="dropdown-item"
                                         ic-get-from="{% url 'edit_list' list.id %}"
                                         ic-target="#modal_base"
-                                        ic-deps="ignore">
+                                        ic-deps="ignore"
+                                        ic-include="{'url': {% url 'edit_list' list.id %}">
                                     Edit List
                                 </button>
 
