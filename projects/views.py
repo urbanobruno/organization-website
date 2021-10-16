@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from projects.forms import CreateTaskForm
 from projects.models import Project, PriorityTask, Task, TaskList
-
+from django.db import connection
 
 def home(request):
     return render(request, 'home/home.html')
@@ -25,20 +25,25 @@ def projects(request):
     return render(request, 'projects/projects_base.html', context={'projects': project})
 
 
-# todo
+from typing import Callable, Dict, Any, Type
 def create_modal(
         request,
-        form,
-        url,
-        title,
-        obj_instance=None,
-        form_initial=None,
-        func_fix_form=None,
-        func_after_form=None,
-        success_msg=None,
-        refresh='content',
+        form: Callable,
+        url: str,
+        title: str,
+        *,
+        obj_instance: Type = None,
+        form_initial: Dict[str, Any] = None,
+        func_fix_form: Callable = None,
+        func_after_form: Callable = None,
+        form_model: bool = True,
+        success_msg: str = None,
+        submit_button_msg: str = 'Save',
+        refresh: str = 'content',
 ):
-    options_form = {'instance': obj_instance}
+    options_form = {}
+    if obj_instance:
+        options_form['instance'] = obj_instance
     if form_initial:
         options_form['initial'] = form_initial
 
@@ -50,29 +55,30 @@ def create_modal(
 
         # todo if form not valid resend the form with errors
         if f.is_valid():
-            s = f.save()
+            print('Form Valido')
+            if form_model:
+                f = f.save()
 
             if func_after_form:
-                func_after_form(s)
+                func_after_form(f)
 
             if success_msg:
                 messages.success(request, f'{success_msg}')
 
             response = HttpResponse()
 
-            # todo define ids - make id content of whole page - content
             response['X-IC-Script'] = f'Intercooler.refresh($("#{refresh}"));'
 
             return response
+        print('Form não valido')
     else:
         f = form(**options_form)
-    # todo check if error think has to be post again
 
     context = {
         'form': f,
         'url': url,
         'title': title,
-        'submit_button': 'Save,'
+        'submit_button': submit_button_msg,
     }
 
     response = render(request, 'extra/create_forms.html', context=context)
@@ -86,9 +92,16 @@ def create_modal(
 # todo
 # @login_required
 def view_project(request, project_id):
+    print('chamou view')
     project = Project.objects.get(id=project_id)
+    # todo check later selct_related
 
-    return render(request, 'projects/view_project.html', context={'item': project})
+    context = {
+        'item': project,
+        'connection': connection
+    }
+
+    return render(request, 'projects/view_project.html', context=context)
 
 
 # @login_required todo

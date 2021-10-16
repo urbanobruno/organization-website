@@ -36,11 +36,18 @@
                                 </div>
                                 <div class="col-12 col-md-2 float-right">
 
+                                    <button class="btn btn-info btn-sm"
+                                            ic-get-from="{% url 'view_project' project.id %}"
+                                            ic-target="#content"
+                                            ic-deps="ignore">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+
                                     <button class="btn btn-primary btn-sm"
                                             ic-get-from="{% url 'edit_project' project.id %}"
                                             ic-target="#modal_base"
                                             ic-deps="ignore"
-                                            ic-include="{'url': {% url 'edit_project' project.id %}">
+                                            ic-include='{"url": "{% url 'edit_project' project.id %}"}'>
                                         <i class="fa fa-pencil-alt"></i>
                                     </button>
 
@@ -48,11 +55,11 @@
                                             ic-post-to="{% url 'delete_project' project.id %}"
                                             ic-confirm="Delete Project {{ project.name }}?"
                                             ic-deps="ignore">
-                                        <i class="fa fa-pencil-alt"></i>
+                                        <i class="fa fa-times"></i>
                                     </button>
                                 </div>
 
-                                <p>XX {{ project.created_at }}</p>
+                                <p>XX {{ project.created_at }}</p> <!-- todo fix data -->
                             </div>
                         </li>
                     {% endfor %}

@@ -5,19 +5,48 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="modal_form_label">{{ title }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" onclick="close_modal()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <form method="post" action="{{ url }}">
             {% csrf_token %}
             <div class="modal-body">
-                {{ form|crispy|safe }}
+                {{ form|crispy }}
             </div>
-            <div class="modal-footer"> <!-- Save -->
+            <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">{{ submit_button|default:"Save" }}</button>
             </div>
         </form>
     </div>
 </div>
 
+{# data-dismiss="modal" aria-label="Close"#}
+
+    <script>
+        function close_modal () {
+            $("#modal_base").modal("hide");
+        }
+    </script>
+
+{#{% load crispy_forms_filters %}#}
+{#<!-- cade classe modal -->#}
+{#<form class="modal" role="form" method="post" action="{{ url }}">#}
+{#    {% csrf_token %}#}
+{#    <div class="modal-dialog" role="document">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header">#}
+{#                <h5 class="modal-title" id="form_label">{{ title }}</h5>#}
+{#                <button type="button" class="close" id="close_modal" data-dismiss="modal" aria-label="Close">#}
+{#                    <span aria-hidden="true">&times;</span>#}
+{#                </button>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                {{ form|crispy|safe }}#}
+{#            </div>#}
+{#            <div class="modal-footer"> <!-- Save -->#}
+{#                <button type="submit" class="btn btn-primary">Save</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</form>#}

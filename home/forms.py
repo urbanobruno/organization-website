@@ -1,14 +1,15 @@
-from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.forms import ModelForm, Form
+from django import forms
 
 
-class LoginForm(forms.BaseForm):
+class LoginForm(Form):
     username = forms.CharField(required=True)
-    password = forms.PasswordInput()
+    password = forms.CharField(widget=forms.PasswordInput(), min_length=6)
 
     def clean(self):
-        data = self.data
+        data = self.cleaned_data
         user = User.objects.filter(username=data['username'])
         if not user.exists():
             self.add_error(
@@ -22,14 +23,15 @@ class LoginForm(forms.BaseForm):
             )
 
 
-class RegisterForm(forms.BaseForm):
+class RegisterForm(Form):
     username = forms.CharField(required=True)
     email = forms.EmailField(required=True)
-    password = forms.PasswordInput()
-    check_password = forms.PasswordInput()
+    password = forms.CharField(widget=forms.PasswordInput(), min_length=6)
+    check_password = forms.CharField(widget=forms.PasswordInput(), min_length=6)
 
     def clean(self):
-        data = self.data
+        print('Clean is called')
+        data = self.cleaned_data
         if User.objects.filter(username=data['username']).exists():
             self.add_error(
                 'username',
@@ -51,3 +53,4 @@ class RegisterForm(forms.BaseForm):
                 'Passwords are not the same.'
             )
 
+        # return data

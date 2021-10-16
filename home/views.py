@@ -14,8 +14,9 @@ def home(request):
 
 
 def login_user(request):
-    def login_user_func(saved_form):
-        data = saved_form.cleaned_data
+    print('Chegou View Login')
+    def login_user_func(form):
+        data = form.cleaned_data
         user = authenticate(
             request,
             username=data['username'],
@@ -29,14 +30,18 @@ def login_user(request):
         request.GET.get('url'),
         'Login',
         func_after_form=login_user_func,
+        form_model=False,
+        submit_button_msg='Login',
         success_msg='Logged successfully',
     )
 
 
 def register_user(request):
-    def create_and_login_user(saved_form):
+    print('Chegou View Register')
+
+    def create_and_login_user(form):
         # todo check if form clean is being afetuated
-        data = saved_form.cleaned_data
+        data = form.cleaned_data
         user = User.objects.create(
             username=data['username'],
             email=data['email'],
@@ -50,6 +55,8 @@ def register_user(request):
         request.GET.get('url'),
         'Register',
         func_after_form=create_and_login_user,
+        form_model=False,
+        submit_button_msg='Register',
         success_msg='Registered successfully',
     )
 

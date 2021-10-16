@@ -43,10 +43,16 @@
 
     <!-- Intercooler Modal Creation -->
     <div class="modal fade" id="modal_base" tabindex="-1" role="dialog" aria-labelledby="modal_form_label"
-     aria-hidden="true">
+         aria-hidden="true">
 
     </div>
 </main>
+
+{% block csrf_token_div %}
+    <form id="defaults">
+        <input name="csrfmiddlewaretoken" type="hidden" value="{{ csrf_token }}">
+    </form>
+{% endblock %}
 
 {% block scripts %}
     <!-- Optional JavaScript -->
@@ -74,13 +80,6 @@
     <script src="https://cdn.jsdelivr.net/npm/intercooler"></script>
 
 {% endblock %}
-
-{#    <script>#}
-{#        $("#close_modal").click(function () {#}
-{#            $("#modal_base").modal("hide");#}
-{# $("#modal_base").hide(); #}
-{#        })#}
-{#    </script>#}
 
 </body>
 </html>

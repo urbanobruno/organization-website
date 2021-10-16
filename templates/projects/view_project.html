@@ -25,7 +25,7 @@
                                             ic-get-from="{% url 'edit_priority' priority.id %}"
                                             ic-target="#modal_base"
                                             ic-deps="ignore"
-                                            ic-include="{'url': {% url 'edit_priority' priority.id %}">
+                                            ic-include='{"url": "{% url 'edit_priority' priority.id %}"}'>
                                         <i class="fa fa-pencil-alt"></i>
                                     </button>
 
@@ -97,7 +97,7 @@
                                         ic-get-from="{% url 'create_task' list.id %}"
                                         ic-target="#modal_base"
                                         ic-deps="ignore"
-                                        ic-include="{'url': {% url 'create_task' list.id %}">
+                                        ic-include='{"url": "{% url 'create_task' list.id %}"}'>
                                     Create New Task
                                 </button>
 
@@ -112,7 +112,7 @@
                                         ic-get-from="{% url 'edit_list' list.id %}"
                                         ic-target="#modal_base"
                                         ic-deps="ignore"
-                                        ic-include="{'url': {% url 'edit_list' list.id %}">
+                                        ic-include='{"url": "{% url 'edit_list' list.id %}"}'>
                                     Edit List
                                 </button>
 
@@ -137,9 +137,11 @@
                                             </div>
                                             <!-- todo change -->
                                         </div>
-                                        <p class="mb-1 small">
-                                            <b>Priority:</b> {{ task.prioriy }}
-                                        </p>
+                                        {% if task.priority %}
+                                            <p class="mb-1 small">
+                                                <b>Priority:</b> {{ task.priority|default:"" }}
+                                            </p>
+                                        {% endif %}
                                     </li>
 
                                 {% endfor %}
