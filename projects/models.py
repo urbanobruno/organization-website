@@ -6,14 +6,16 @@ from django.utils import timezone
 
 # todo ver como fica os templates com a descrição no 255
 class Project(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=75)
+    description = models.TextField(max_length=300, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateField(default=timezone.now, editable=False)
+    updated_at = models.DateTimeField(editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Project'
         verbose_name_plural = 'Projects'
+        ordering = ['updated_at', 'created_at']
 
     def __str__(self):
         return self.name

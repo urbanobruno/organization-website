@@ -2,15 +2,33 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
-
-
-# Create your views here.
+from django.contrib import messages
 from home.forms import RegisterForm, LoginForm
 from projects.views import create_modal
-
+from secrets_settings import dados
+import html2text
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 def home(request):
     return render(request, 'home/home.html')
+
+# @login_required
+def profile(request):
+    pass
+    return HttpResponse()
+    # return render()
+
+def settings(request):
+    pass
+    return HttpResponse()
+    # return render()
+
+def reset_password(request):
+    pass
+    return HttpResponse()
+    # return render()
+
 
 
 def login_user(request):
@@ -22,7 +40,10 @@ def login_user(request):
             username=data['username'],
             password=data['password'],
         )
-        login(request, user)
+        if user is not None:
+            login(request, user)
+        form.add_error('username', 'user invalid.')
+        form.add_error('password', 'user invalid.')
 
     return create_modal(
         request,
@@ -65,3 +86,55 @@ def logout_user(request):
     logout(request)
 
     return render(request, 'home/home.html')
+
+
+def contact_me(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    message = request.POST.get('message')
+
+    response = HttpResponse()
+
+    # todo refresh messages
+    response['X-IC-Script'] = f'Intercooler.refresh($("#main-content"));'
+
+    try:
+        my_email = dados['MY_EMAIL']  # todo check
+
+        print(dados['MY_EMAIL'])
+        print(my_email)
+
+        params = {
+            'name': name,
+            'email': email,
+            'message': message,
+        }
+
+        html = render_to_string(
+            f'extra/contact_email.html',
+            params,
+        )
+
+        enviado_por = f'"Bruno Organization Web" <{my_email}>'
+
+        email = EmailMultiAlternatives(
+            subject=f'Mensagem de {name} - {email}',
+            body=html2text.html2text(html),
+            from_email=enviado_por,
+            to=my_email,
+            cc=[],
+            bcc=[],
+
+        )
+
+        email.attach_alternative(html, 'text/html')
+
+        email.send()
+
+        messages.success(request, f'Message sended successfully.')
+    except:
+        messages.error(request, f'Error trying to send message.')
+
+    return response
+
+

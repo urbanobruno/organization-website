@@ -7,11 +7,7 @@
 	<a class="btn btn-info float-left" href="{% url 'calendar' %}{{ prev_month }}"> Previous Month </a>
 	<a class="btn btn-info float-right" href="{% url 'calendar' %}{{ next_month }}"> Next Month </a>
 </div>
-{##}
-{#<div class="clearfix">#}
-{#	<a class="btn btn-info left" href="{'% url 'cal:calendar' %}?{'{ prev_month }}"> Previous Month </a>#}
-{#	<a class="btn btn-info right" href="{'% url 'cal:calendar' %}?{'{ next_month }}"> Next Month </a>#}
-{#</div>#}
+<!-- todo ? -  ? before func -->
 
 {{ calendar|safe }}
 

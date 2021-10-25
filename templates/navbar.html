@@ -1,8 +1,8 @@
 <!-- todo fix navbar -->
 
-    <form id="defaults">
-        <input name="csrfmiddlewaretoken" type="hidden" value="{{ csrf_token }}">
-    </form>
+<form id="defaults">
+    <input name="csrfmiddlewaretoken" type="hidden" value="{{ csrf_token }}">
+</form>
 
 <!-- Responsive navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -14,16 +14,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="{% url 'home' %}">
+                    <a class="nav-link" href="{% url 'home' %}">
                         Home
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link"
-                       ic-src="{% url 'calendar' %}"
+                       ic-get-from="{% url 'calendar' %}"
                        ic-target="#content"
-                       ic-deps="ignore">
+                       ic-deps="ignore"
+                       ic-push-url="true">
                         Calendar
                     </a>
                 </li>
@@ -31,7 +31,8 @@
                     <a class="nav-link"
                        ic-get-from="{% url 'projects' %}"
                        ic-target="#content"
-                       ic-deps="ignore">
+                       ic-deps="ignore"
+                       ic-push-url="true">
                         Projects
                     </a>
                 </li>
@@ -52,9 +53,12 @@
 
                     <!-- todo dropdown links -->
                     <div class="dropdown-menu dropdown-menu-right bg-dark text-center" aria-labelledby="NavDropdown">
-                        <a class="dropdown-item text-light text-center" href="#">Profile</a>
-                        <a class="dropdown-item text-light" href="#">Settings</a>
                         {% if user.is_authenticated %}
+                            <a class="dropdown-item text-light text-center"
+                               ic-get-from="{% url 'profile' %}"
+                               ic-deps="ignore">
+                                Profile
+                            </a>
                             <a class="dropdown-item text-light"
                                ic-post-to="{% url 'logout_user' %}"
                                ic-deps="ignore"

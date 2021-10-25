@@ -1,3 +1,4 @@
 secrets_settings.py
 .env
 .env*
+requirements.txt

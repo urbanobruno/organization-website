@@ -16,7 +16,7 @@
                     Priority
                 </div>
                 <div class="card-body">
-                    <div class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush">
                         {% for priority in item.prioritytask_set.all %}
                             <li class="list-group-item rounded">
                                 {{ priority.name }}
@@ -69,7 +69,7 @@
                             </div>
                         </li>
 
-                    </div>
+                    </ul>
                 </div>
 
             </div>
@@ -79,7 +79,7 @@
         <!-- ROW -->
         <div class="col-12 col-md-9 overflow-auto d-flex">
             {% for list in item.tasklist_set.all %}
-                <div class="rounded sort_lists mr-2 ml-2" id="{{ list.order }}">
+                <div class="rounded inline-block sort_lists float-left mr-2 ml-2" id="{{ list.order }}">
                     <div class="rounded border border-dark">
                         <div class="card-header">
                             {{ list.name }}
@@ -166,6 +166,8 @@
         Sortable.create(elements_lists[i], {
             group: 'shared_list',
             animation: 150,
+            direction: 'horizontal',
+
 
             onEnd: function (evt) {
 

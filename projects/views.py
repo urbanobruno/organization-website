@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import F
+from django.db.models import F, Case, When, Count
 from django.forms import modelform_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.timezone import localtime
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from projects.forms import CreateTaskForm
@@ -92,9 +93,15 @@ def create_modal(
 # todo
 # @login_required
 def view_project(request, project_id):
-    print('chamou view')
     project = Project.objects.get(id=project_id)
-    # todo check later selct_related
+    project.updated_at = localtime()
+    project.save()
+    #
+    # count_data = TaskList.objects.filter(
+    #     project_id=project_id,
+    # ).aggregate(
+    #     tasks_count=Count('task')
+    # )
 
     context = {
         'item': project,
