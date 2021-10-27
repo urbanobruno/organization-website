@@ -5,6 +5,9 @@ from django.utils import timezone
 
 
 # todo ver como fica os templates com a descrição no 255
+from django.utils.timezone import localtime
+
+
 class Project(models.Model):
     name = models.CharField(max_length=75)
     description = models.TextField(max_length=300, blank=True, null=True)
@@ -19,6 +22,11 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    # todo check
+    def save(self, *args, **kwargs):
+        self.updated_at = localtime()
+        super().save(*args, **kwargs)
 
 
 # todo deixar criado ja high(red), medium(yellow), low(green) - check
@@ -36,7 +44,7 @@ class PriorityTask(models.Model):
 
 class TaskList(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    name = models.CharField(max_length=55, verbose_name='Nome da Lista')
+    name = models.CharField(max_length=55)
     order = models.IntegerField(default=1, editable=False)
 
     class Meta:
@@ -51,10 +59,12 @@ class TaskList(models.Model):
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     list = models.ForeignKey(TaskList, on_delete=models.CASCADE, blank=True, null=True)
-    title = models.CharField(max_length=55, verbose_name='Título')
-    description = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descricão')
+    title = models.CharField(max_length=55, verbose_name='Title')
+    description = models.TextField(max_length=255, blank=True, null=True, verbose_name='Description')
     priority = models.ForeignKey(PriorityTask, blank=True, null=True, on_delete=models.SET_NULL)
-    date = models.DateField(blank=True, null=True, verbose_name='Data Final')
+    date = models.DateField(blank=True, null=True, verbose_name='Date')
+    start_time = models.TimeField(null=True, blank=True, verbose_name='Starting Time')
+    final_time = models.TimeField(null=True, blank=True, verbose_name='Final Time')
     order = models.IntegerField(default=1, editable=False)
 
     class Meta:

@@ -2,17 +2,27 @@
 {% load crispy_forms_filters %}
 
 
-<div class="row">
+<div class="row mt-5">
     <div class="col-12 col-md-2"></div>
     <div class="col-12 col-md-8">
 
-
-        <div class="projects card rounded">
+        <div class="projects card rounded ">
             <div class="rounded border border-dark">
                 <div class="card-header">
                     Projects
 
-                    <!-- Todo implement search engine and create project -->
+                    <form class="form-inline my-2 my-lg-0 ml-lg-4" action="{% url 'search_projects' %}"
+                          ic-target="#content" ic-deps="ignore">
+                        <input name="term" value="{{ request.GET.termo }}" class="form-control mr-sm-2" type="search"
+                               placeholder="Search" aria-label="Search">
+                    </form>
+
+                    <button class="btn btn-success float-right"
+                            ic-get-from="{% url 'create_project' %}"
+                            ic-target="#modal_base"
+                            ic-deps="ignore">
+                        Create Project
+                    </button>
 
                 </div>
                 <!-- todo same id in list group and task group -->
@@ -28,7 +38,7 @@
                                          ic-push-url="true">
 
                                         <h6>
-                                            {{ project.name }}
+                                            <a>{{ project.name }}</a>
                                         </h6>
                                     </div>
                                     <div class="col-12 col-md-5"
@@ -39,28 +49,22 @@
                                         {{ project.description|default:"" }}
                                     </div>
                                     <div class="col-12 col-md-2 float-right">
+                                        <div class="btn-group">
+                                            <button class="btn btn-primary btn-sm"
+                                                    ic-get-from="{% url 'edit_project' project.id %}"
+                                                    ic-target="#modal_base"
+                                                    ic-deps="ignore"
+                                                    ic-include='{"url": "{% url 'edit_project' project.id %}"}'>
+                                                <i class="fa fa-pencil-alt"></i>
+                                            </button>
 
-                                        <button class="btn btn-info btn-sm"
-                                                ic-get-from="{% url 'view_project' project.id %}"
-                                                ic-target="#content"
-                                                ic-deps="ignore">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-
-                                        <button class="btn btn-primary btn-sm"
-                                                ic-get-from="{% url 'edit_project' project.id %}"
-                                                ic-target="#modal_base"
-                                                ic-deps="ignore"
-                                                ic-include='{"url": "{% url 'edit_project' project.id %}"}'>
-                                            <i class="fa fa-pencil-alt"></i>
-                                        </button>
-
-                                        <button class="btn btn-danger btn-sm"
-                                                ic-post-to="{% url 'delete_project' project.id %}"
-                                                ic-confirm="Delete Project {{ project.name }}?"
-                                                ic-deps="ignore">
-                                            <i class="fa fa-times"></i>
-                                        </button>
+                                            <button class="btn btn-danger btn-sm"
+                                                    ic-post-to="{% url 'delete_project' project.id %}"
+                                                    ic-confirm="Delete Project {{ project.name }}?"
+                                                    ic-deps="ignore">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
                                     </div>
 
                                 </div>

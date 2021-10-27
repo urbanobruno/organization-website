@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import F, Case, When, Count
+from django.db.models import F, Case, When, Count, Q
 from django.forms import modelform_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -17,13 +17,15 @@ def home(request):
 
 def projects(request):
 
+
+    # todo switch
     # projects = Project.objects.filter(
     #     user_id=request.user.id
     # )
 
-    project = Project.objects.all()
+    projects = Project.objects.all()
 
-    return render(request, 'projects/projects_base.html', context={'projects': project})
+    return render(request, 'projects/projects_base.html', context={'projects': projects})
 
 
 from typing import Callable, Dict, Any, Type
@@ -68,6 +70,8 @@ def create_modal(
 
             response = HttpResponse()
 
+            # todo send script to hide modal
+            # todo refresh messages
             response['X-IC-Script'] = f'Intercooler.refresh($("#{refresh}"));'
 
             return response
@@ -85,7 +89,7 @@ def create_modal(
     response = render(request, 'extra/create_forms.html', context=context)
 
     # todo check toggle
-    response['X-IC-Script'] = '$("#modal_base").modal("show");'
+    response['X-IC-Script'] = 'show_modal()'
 
     return response
 
@@ -94,7 +98,6 @@ def create_modal(
 # @login_required
 def view_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    project.updated_at = localtime()
     project.save()
     #
     # count_data = TaskList.objects.filter(
@@ -105,7 +108,7 @@ def view_project(request, project_id):
 
     context = {
         'item': project,
-        'connection': connection
+        # 'connection': connection
     }
 
     return render(request, 'projects/view_project.html', context=context)
@@ -243,6 +246,8 @@ def delete_project(request, project_id):
 
     response = HttpResponse()
 
+    # todo redirect to projects
+
     # todo check content
     response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
 
@@ -331,6 +336,7 @@ def create_priority_task(request, project_id):
 
     return response
 
+
 # @login_required #todo
 def edit_priority(request, priority_id):
     return create_modal(
@@ -340,21 +346,20 @@ def edit_priority(request, priority_id):
         'Edit Priority',
         obj_instance=PriorityTask.objects.get(id=priority_id),
         success_msg='Priority edited successfully',
+        refresh='priorities'
     )
 
 
 # @login_required # todo
 @require_POST
 def delete_priority(request, priority_id):
-    print('ENTROU NA VIEW')
     PriorityTask.objects.get(id=priority_id).delete()
 
     messages.success(request, 'Priority deleted successfully')
 
     response = HttpResponse()
 
-    # todo nao ta dando refresh
-    response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
+    response['X-IC-Script'] = f'Intercooler.refresh($("#priorities"));'
 
     return response
 
@@ -376,3 +381,20 @@ def delete_list(request, list_id):
     response['X-IC-Script'] = f'Intercooler.refresh($("#content"));'
 
     return response
+
+# @login_required
+def search_projects(request):
+    term = request.GET.get('term', None)
+
+    if term is None:
+        projects_search = Project.objects.filter(
+            user_id=request.user.id
+        )
+    else:
+        projects_search = Project.objects.filter(
+            Q(name__icontains=term),
+            Q(description__contains=term)
+        )
+
+    return render(request, 'projects/projects_base.html', context={'projects': projects_search})
+

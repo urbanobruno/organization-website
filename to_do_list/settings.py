@@ -150,18 +150,23 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'templates/static']
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DEFAULT_FROM_EMAIL = dados['EMAIL_WEB']
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = dados['EMAIL_WEB']
+EMAIL_HOST_PASSWORD = dados['EMAIL_PASSWORD']
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# MESSAGE_TAGS = {
-#     constants.ERROR: 'alert-danger',
-#     constants.WARNING: 'alert-warning',
-#     constants.DEBUG: 'alert-info',
-#     constants.SUCCESS: 'alert-success',
-#     constants.INFO: 'alert-info',
-# }
+MESSAGE_TAGS = {
+    constants.ERROR: 'alert-danger',
+    constants.WARNING: 'alert-warning',
+    constants.DEBUG: 'alert-info',
+    constants.SUCCESS: 'alert-success',
+    constants.INFO: 'alert-info',
+}

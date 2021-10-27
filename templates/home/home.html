@@ -73,21 +73,22 @@
             </div>
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-6">
-                    <form id="contactForm" method="POST" action="{% url 'contact_me' %}">
+                    <form id="contactForm" method="post" action="{% url 'contact_me' %}">
+                        {% csrf_token %}
                         <!-- Name input-->
                         <div class="form-floating mb-3">
-                            <input class="form-control" id="name" type="text" placeholder="Your Name" required/>
+                            <input class="form-control" id="name" name="name" type="text" placeholder="Your Name" required/>
                             <label for="name">Name</label>
                         </div>
                         <!-- Email address input-->
                         <div class="form-floating mb-3">
-                            <input class="form-control" id="email" type="email"
+                            <input class="form-control" id="email" name="email" type="email"
                                    placeholder="name@example.com" required/>
                             <label for="email">Email address</label>
                         </div>
                         <!-- Message input-->
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" id="message" type="text"
+                            <textarea class="form-control" id="message" name="message"
                                       placeholder="Your Message" style="height: 10rem" required></textarea>
                             <label for="message">Message</label>
                         </div>
@@ -98,6 +99,8 @@
                                 Submit
                             </button>
                         </div>
+
+                        {% include 'extra/messages.html' %}
                     </form>
                 </div>
             </div>

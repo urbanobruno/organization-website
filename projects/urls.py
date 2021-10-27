@@ -47,4 +47,7 @@ urlpatterns = [
     path('delete_priority/<int:priority_id>',
          views.delete_priority,
          name='delete_priority'),
+    path('search_projects',
+         views.search_projects,
+         name='search_projects'),
 ]

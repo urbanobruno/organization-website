@@ -23,6 +23,7 @@
           integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     {#    <link rel="stylesheet" href="{% static 'h' %}">#}
 
+    <!-- todo delete -->
     <link rel="stylesheet" href="{% static 'css/global_styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/colors.css' %}">
 
@@ -56,7 +57,7 @@
     </form>
 {% endblock %}
 
-{% block scripts %}
+{% block cdns %}
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -80,6 +81,23 @@
 
     <!-- Intercooler -->
     <script src="https://cdn.jsdelivr.net/npm/intercooler"></script>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function show_modal() {
+            setTimeout(function () {
+                $("#modal_base").modal("show");
+            }, 500);
+        }
+
+        function close_modal() {
+            $('#modal_base').modal("hide");
+            {#$('.modal-backdrop').remove();#}
+        }
+    </script>
+
 
 {% endblock %}
 
